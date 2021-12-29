@@ -77,6 +77,11 @@ void AWC_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AWC_Character::OnResetVR);
 }
 
+float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
 
 void AWC_Character::OnResetVR()
 {

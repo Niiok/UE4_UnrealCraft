@@ -61,6 +61,13 @@ protected:
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual float TakeDamage
+	(
+		float DamageAmount,
+		struct FDamageEvent const & DamageEvent,
+		class AController * EventInstigator,
+		AActor * DamageCauser
+	) override;
 	// End of APawn interface
 
 public:
