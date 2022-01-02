@@ -3,7 +3,9 @@
 - 키워드 : 백뷰,  RPG,  상호작용
 - 사용 엔진 : 언리얼
 - 참여자 : 류한진
-
+- 컨셉 상세 : 
+  - GameplayTag와 GameplayAttribute 적극 활용
+  - 이를 기반으로 GameplayAbility와 AbilityTask 사용하는 유연한 게임 개발
 
 ## 핵심 요소 - 2주
 
@@ -11,7 +13,7 @@
   - SaveGame
   - 리플리케이션 상정
   - GameFramework 추종 모듈화
-- 월드, 전투	12/28 ~ 12/30
+- 월드, 전투	12/28 ~ 12/30 
   - 공통
   - 이동, 공격, 점프
   - 플레이어

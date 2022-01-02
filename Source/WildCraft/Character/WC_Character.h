@@ -18,6 +18,10 @@ class WILDCRAFT_API AWC_Character : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
+		class UAbilitySystemComponent* AbilityComponent;
+
 public:
 	AWC_Character();
 
