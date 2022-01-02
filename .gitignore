@@ -72,3 +72,17 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+
+Content/AdventureLootPack/**
+Content/CloseCombatAnimSet/**
+Content/Deadly_Traps/**
+Content/FighterAnimationPack/**
+Content/FTYVFXCOLLECTION5/**
+Content/GreatSword/**
+Content/LowPolyCubeWorld/**
+Content/Medieval_Item_and_Props/**
+Content/MedievalGirl/**
+Content/Mobile_Fantasy_FX/**
+Content/objects_destruction/**
+Content/Platformer_Collectible_Items_Kit/**
