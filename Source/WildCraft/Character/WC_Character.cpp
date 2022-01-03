@@ -50,7 +50,7 @@ AWC_Character::AWC_Character()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
 
-	AbilityComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilityComponent"));
+	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilityComponent"));
 	//AbilityComponent->
 }
 
@@ -143,4 +143,11 @@ void AWC_Character::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+
+// IAbilitySystemInterface implementation
+UAbilitySystemComponent * AWC_Character::GetAbilitySystemComponent() const
+{
+	return AbilitySystem;
 }

@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameplayAbilitySet.h"
+#include "AbilitySystemInterface.h"
 #include "WC_Character.generated.h"
 
 UCLASS()
-class WILDCRAFT_API AWC_Character : public ACharacter
+class WILDCRAFT_API AWC_Character : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -19,8 +21,13 @@ class WILDCRAFT_API AWC_Character : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
-		class UAbilitySystemComponent* AbilityComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ability, meta = (AllowPrivateAccess = "true"))
+		UGameplayAbilitySet* AbilitySet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ability, meta = (AllowPrivateAccess = "true"))
+		class UAbilitySystemComponent* AbilitySystem;
+
+
 
 public:
 	AWC_Character();
@@ -79,4 +86,7 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	// IAbilitySystemInterface을(를) 통해 상속됨
+	virtual UAbilitySystemComponent * GetAbilitySystemComponent() const override;
 };
