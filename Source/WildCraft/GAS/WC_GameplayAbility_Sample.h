@@ -43,7 +43,7 @@ public:
 		const FGameplayTagContainer * SourceTags,
 		const FGameplayTagContainer * TargetTags,
 		OUT FGameplayTagContainer * OptionalRelevantTags
-	) const {
+	) const override {
 		return true;
 	}
 
@@ -52,7 +52,7 @@ public:
 		const FGameplayAbilitySpecHandle Handle,
 		const FGameplayAbilityActorInfo * ActorInfo,
 		OUT FGameplayTagContainer * OptionalRelevantTags
-	) const {
+	) const override {
 		return true;
 		//return Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags);
 	}
@@ -63,12 +63,12 @@ public:
 		const FGameplayAbilityActorInfo * ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo,
 		const FGameplayEventData * TriggerEventData
-	) {}
+	) override {}
 
 	virtual void InputPressed
 	(
 		const FGameplayAbilitySpecHandle Handle,
 		const FGameplayAbilityActorInfo * ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo
-	) {}
+	) override {}
 };
