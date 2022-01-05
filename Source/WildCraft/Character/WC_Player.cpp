@@ -13,7 +13,7 @@
 
 
 AWC_Player::AWC_Player()
-	//: Super()
+	: Super()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -57,33 +57,38 @@ AWC_Player::AWC_Player()
 void AWC_Player::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	//Super::SetupPlayerInputComponent(PlayerInputComponent);
+	if (!!AbilitySystem)
+	{
 
-	AbilitySystem->BindToInputComponent(PlayerInputComponent);
+		AbilitySystem->BindToInputComponent(PlayerInputComponent);
 
-	if(AbilitySet != NULL)
-		for (const FGameplayAbilityBindInfo& BindInfo : AbilitySet->Abilities)
-		{
-			FGameplayAbilitySpec spec(
-				BindInfo.GameplayAbilityClass->GetDefaultObject<UGameplayAbility>(),
-				1,
-				(int32)BindInfo.Command
-			);
+		if (AbilitySet != NULL)
+			for (const FGameplayAbilityBindInfo& BindInfo : AbilitySet->Abilities)
+			{
+				FGameplayAbilitySpec spec(
+					BindInfo.GameplayAbilityClass->GetDefaultObject<UGameplayAbility>(),
+					1,
+					(int32)BindInfo.Command
+				);
 
-			FGameplayAbilitySpecHandle abilityHandle = AbilitySystem->GiveAbility(spec);
+				FGameplayAbilitySpecHandle abilityHandle = AbilitySystem->GiveAbility(spec);
 
-			int32 AbilityID = (int32)BindInfo.Command;
+				int32 AbilityID = (int32)BindInfo.Command;
 
-			FGameplayAbilityInputBinds inputBinds(
-				FString::Printf(TEXT("ConfirmTargetting_%s_%s"), *GetName(), *BindInfo.GameplayAbilityClass->GetName()),
-				FString::Printf(TEXT("CancelTargetting_%s_%s"), *GetName(), *BindInfo.GameplayAbilityClass->GetName()),
-				"EGameplayAbilityInputBinds",
-				AbilityID, AbilityID
-			);
+				FGameplayAbilityInputBinds inputBinds(
+					FString::Printf(TEXT("ConfirmTargetting_%s_%s"), *GetName(), *BindInfo.GameplayAbilityClass->GetName()),
+					FString::Printf(TEXT("CancelTargetting_%s_%s"), *GetName(), *BindInfo.GameplayAbilityClass->GetName()),
+					"EGameplayAbilityInputBinds",
+					AbilityID, AbilityID
+				);
 
-			AbilitySystem->BindAbilityActivationToInputComponent(PlayerInputComponent, inputBinds);
+				AbilitySystem->BindAbilityActivationToInputComponent(PlayerInputComponent, inputBinds);
 
-			AbilitySystem->TryActivateAbility(abilityHandle, 1);
-		}
+				AbilitySystem->TryActivateAbility(abilityHandle, 1);
+			}
+	}
+	else
+		UE_LOG(LogTemp, Error, TEXT("Ability System doesn't exists while input binding"));
 
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);

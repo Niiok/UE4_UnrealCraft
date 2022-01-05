@@ -24,5 +24,8 @@ public class WildCraft : ModuleRules
 
         bLegacyPublicIncludePaths = false;
         PublicIncludePaths.Add(ModuleDirectory);
+
+        MinFilesUsingPrecompiledHeaderOverride = 1;
+        bFasterWithoutUnity = true;
     }
 }

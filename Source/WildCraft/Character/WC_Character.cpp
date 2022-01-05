@@ -5,17 +5,23 @@
 #include "AbilitySystemComponent.h"
 //#include "GameplayTaskComponent.h"
 #include "GAS/WC_AttributeSet_Sample.h"
+#include "GAS/WC_GameplayTask_Sample.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
 
 AWC_Character::AWC_Character()
 {
-	UE_LOG(LogTemp, Warning, TEXT("wow character"));
-
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	//AbilityComponent->
 	GameplayTask = CreateDefaultSubobject<UGameplayTasksComponent>(TEXT("GameplayTask"));
+
+	UWC_GameplayTask_Sample* task =
+		UWC_GameplayTask_Sample::ConstructTask(
+			this, particleSystem, FVector(200.0f, 0.0f, 200.0f));
+
+	if (GameplayTask && task)
+		GameplayTask->AddTaskReadyForActivation(*task);
 }
 
 inline UGameplayEffect* ConstructGameplayEffect(FString name)
@@ -52,6 +58,10 @@ void AWC_Character::GameplayEffect_Sample()
 	RecoverHP->Period = 0.5f;
 
 	AddModifier(RecoverHP, hpProperty, EGameplayModOp::Additive, FScalableFloat(50.0f));
+
+	FActiveGameplayEffectHandle recoveryHpEffectHandle =
+		AbilitySystem->ApplyGameplayEffectToTarget(
+			RecoverHP, AbilitySystem, 1.0f);
 }
 
 
