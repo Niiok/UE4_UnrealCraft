@@ -3,9 +3,9 @@
 
 #include "WC_Character.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayAbilitySpec.h"
 //#include "GameplayTaskComponent.h"
 #include "GAS/WC_AttributeSet_Sample.h"
-#include "GAS/WC_GameplayTask_Sample.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -14,6 +14,15 @@ AWC_Character::AWC_Character()
 {
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	//AbilityComponent->
+}
+
+void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
+{
+	FGameplayAbilitySpec spec(Ability);
+	//spec.InputID = 5;
+	//spec.
+
+	AbilitySystem->GiveAbility(spec);
 }
 
 

@@ -25,6 +25,8 @@ protected:
 public:
 	AWC_Character();
 
+	UFUNCTION(BlueprintCallable)
+		void AddAbility(TSubclassOf<UGameplayAbility> Ability);
 
 public:
 
