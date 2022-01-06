@@ -14,56 +14,7 @@ AWC_Character::AWC_Character()
 {
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	//AbilityComponent->
-	GameplayTask = CreateDefaultSubobject<UGameplayTasksComponent>(TEXT("GameplayTask"));
-
-	UWC_GameplayTask_Sample* task =
-		UWC_GameplayTask_Sample::ConstructTask(
-			this, particleSystem, FVector(200.0f, 0.0f, 200.0f));
-
-	if (GameplayTask && task)
-		GameplayTask->AddTaskReadyForActivation(*task);
 }
-
-inline UGameplayEffect* ConstructGameplayEffect(FString name)
-{
-	return NewObject<UGameplayEffect>(GetTransientPackage(), FName(*name));
-}
-
-inline FGameplayModifierInfo& AddModifier(
-	UGameplayEffect* Effect,
-	UProperty* Property,
-	EGameplayModOp::Type Op,
-	const FGameplayEffectModifierMagnitude& Magnitude)
-{
-	int32 index = Effect->Modifiers.Num();
-	Effect->Modifiers.SetNum(index + 1);
-	FGameplayModifierInfo& Info = Effect->Modifiers[index];
-	Info.ModifierMagnitude = Magnitude;
-	Info.ModifierOp = Op;
-	Info.Attribute.SetUProperty(Property);
-	return Info;
-}
-
-void AWC_Character::GameplayEffect_Sample()
-{
-	UGameplayEffect* RecoverHP = ConstructGameplayEffect("RecoverHP");
-
-	UProperty* hpProperty = FindFieldChecked<UProperty>(
-		UWC_AttributeSet_Sample::StaticClass(),
-		GET_MEMBER_NAME_CHECKED(UWC_AttributeSet_Sample, HP));
-
-	RecoverHP->DurationPolicy = EGameplayEffectDurationType::HasDuration;
-	RecoverHP->DurationMagnitude = FScalableFloat(10.0f);
-	RecoverHP->ChanceToApplyToTarget = 1.0f;
-	RecoverHP->Period = 0.5f;
-
-	AddModifier(RecoverHP, hpProperty, EGameplayModOp::Additive, FScalableFloat(50.0f));
-
-	FActiveGameplayEffectHandle recoveryHpEffectHandle =
-		AbilitySystem->ApplyGameplayEffectToTarget(
-			RecoverHP, AbilitySystem, 1.0f);
-}
-
 
 
 //////////////////////////////////////////////////////////////////////////
