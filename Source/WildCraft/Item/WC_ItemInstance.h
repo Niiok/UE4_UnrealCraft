@@ -85,7 +85,7 @@ public:
 
 private:
 	static bool _loaded;
-	static TArray<FWC_ItemIdeal*> _dictionary;
+	static TMap<int, const FWC_ItemIdeal> _ideals;
 
 	static void _Load();
 

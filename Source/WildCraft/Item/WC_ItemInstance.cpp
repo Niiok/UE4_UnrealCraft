@@ -4,9 +4,9 @@
 #include "WC_ItemInstance.h"
 
 bool UWC_ItemInstance::_loaded = false;
-TArray<FWC_ItemIdeal*> UWC_ItemInstance::_dictionary;
+TMap<int, const FWC_ItemIdeal> UWC_ItemInstance::_ideals;
 
-
+	
 UWC_ItemInstance::UWC_ItemInstance()
 {
 	if (!_loaded)
@@ -35,14 +35,23 @@ void UWC_ItemInstance::_Load()
 	if (_loaded)
 		return;
 
-	const FString reference = TEXT("refer refer");
-	UDataTable* table;
+	const FString reference = TEXT("DataTable'/Game/WildCraft/Item/ItemIdeal.ItemIdeal'");
 
 	ConstructorHelpers::FObjectFinder<UDataTable> helper(*reference);
 	if (helper.Succeeded())
 	{
-		table = helper.Object;
-		table->GetAllRows<FWC_ItemIdeal>("", _dictionary);
+		UDataTable* table = helper.Object;
+		TArray<FWC_ItemIdeal*> temp_array;
+
+		table->GetAllRows<FWC_ItemIdeal>("", temp_array);
+
+		for (auto i : temp_array)
+		{
+			if (i->ID != 0)
+				_ideals.Add(i->ID, *i);
+
+			//UE_LOG(LogTemp, Error, TEXT("item data found : %d, %s"), i->ID, *(i->Name.ToString()));
+		}
 
 		_loaded = true;
 	}
@@ -54,8 +63,5 @@ void UWC_ItemInstance::_Load()
 
 const FWC_ItemIdeal * UWC_ItemInstance::_GetIdeal(int ID_)
 {
-	if (ID_ > 0 && ID_ < _dictionary.Max())
-		return _dictionary[ID_];
-	else
-		return NULL;
+	return _ideals.Find(ID_);
 }
