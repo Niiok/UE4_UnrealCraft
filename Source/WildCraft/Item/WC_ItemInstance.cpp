@@ -3,26 +3,26 @@
 
 #include "WC_ItemInstance.h"
 
-bool UWC_ItemInstance::_loaded = false;
-TMap<int, const FWC_ItemIdeal> UWC_ItemInstance::_ideals;
+bool UWC_ItemInstance::_Loaded = false;
+TMap<int, const FWC_ItemIdeal> UWC_ItemInstance::_Ideals;
 
 	
 UWC_ItemInstance::UWC_ItemInstance()
 {
-	if (!_loaded)
+	if (!_Loaded)
 		_Load();
 }
 
 
-UWC_ItemInstance * UWC_ItemInstance::New(int ID_, int level_, int count_)
+UWC_ItemInstance * UWC_ItemInstance::New(int ID_, int Level_, int Count_)
 {
 	UWC_ItemInstance* new_item = NewObject<UWC_ItemInstance>();
 
 	new_item->Ideal = _GetIdeal(ID_);
 
 	new_item->ID = ID_;
-	new_item->Count = count_;
-	new_item->Level = level_;
+	new_item->Count = Count_;
+	new_item->Level = Level_;
 	new_item->Life = new_item->Ideal->MaxLife;
 
 	return new_item;
@@ -32,7 +32,7 @@ UWC_ItemInstance * UWC_ItemInstance::New(int ID_, int level_, int count_)
 
 void UWC_ItemInstance::_Load()
 {
-	if (_loaded)
+	if (_Loaded)
 		return;
 
 	const FString reference = TEXT("DataTable'/Game/WildCraft/Item/ItemIdeal.ItemIdeal'");
@@ -48,12 +48,12 @@ void UWC_ItemInstance::_Load()
 		for (auto i : temp_array)
 		{
 			if (i->ID != 0)
-				_ideals.Add(i->ID, *i);
+				_Ideals.Add(i->ID, *i);
 
 			//UE_LOG(LogTemp, Error, TEXT("item data found : %d, %s"), i->ID, *(i->Name.ToString()));
 		}
 
-		_loaded = true;
+		_Loaded = true;
 	}
 	else
 	{
@@ -63,5 +63,5 @@ void UWC_ItemInstance::_Load()
 
 const FWC_ItemIdeal * UWC_ItemInstance::_GetIdeal(int ID_)
 {
-	return _ideals.Find(ID_);
+	return _Ideals.Find(ID_);
 }

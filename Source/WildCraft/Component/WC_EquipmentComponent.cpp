@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "WC_AttachmentComponent.h"
+#include "WC_EquipmentComponent.h"
 
 // Sets default values for this component's properties
-UWC_AttachmentComponent::UWC_AttachmentComponent()
+UWC_EquipmentComponent::UWC_EquipmentComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -15,7 +15,7 @@ UWC_AttachmentComponent::UWC_AttachmentComponent()
 
 
 // Called when the game starts
-void UWC_AttachmentComponent::BeginPlay()
+void UWC_EquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -25,7 +25,7 @@ void UWC_AttachmentComponent::BeginPlay()
 
 
 // Called every frame
-void UWC_AttachmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UWC_EquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 

@@ -31,23 +31,23 @@ public:
 
 
 	UPROPERTY(EditAnywhere)
-		bool Equipable;
+		uint8 Equipable : 1;
 	UPROPERTY(EditAnywhere)
-		bool Consumable;
+		uint8 Consumable : 1;
 
 	UPROPERTY(EditAnywhere)
-		bool Volatile;
+		uint8 Volatile : 1;
 	UPROPERTY(EditAnywhere)
-		bool Conductive;
+		uint8 Conductive : 1;
 
 	UPROPERTY(EditAnywhere)
-		bool Droppable;
+		uint8 Droppable : 1;
 	UPROPERTY(EditAnywhere)
-		bool Tradable;
+		uint8 Tradable : 1;
 	UPROPERTY(EditAnywhere)
-		bool Disassemable;
+		uint8 Disassemable : 1;
 	UPROPERTY(EditAnywhere)
-		bool Splicable;
+		uint8 Splicable : 1;
 };
 
 /**
@@ -77,15 +77,15 @@ public:
 	UWC_ItemInstance();
 
 	UFUNCTION(BlueprintCallable)
-		static UWC_ItemInstance* New(int ID_, int level_ = 1, int count_ = 1);
+		static UWC_ItemInstance* New(int ID_, int Level_ = 1, int Count_ = 1);
 
 
 
 
 
 private:
-	static bool _loaded;
-	static TMap<int, const FWC_ItemIdeal> _ideals;
+	static bool _Loaded;
+	static TMap<int, const FWC_ItemIdeal> _Ideals;
 
 	static void _Load();
 

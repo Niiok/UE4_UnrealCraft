@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/SaveGame.h"
+#include "WC_SaveGame.h"
 #include "WC_SaveGame_Character.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WILDCRAFT_API UWC_SaveGame_Character : public USaveGame
+class WILDCRAFT_API UWC_SaveGame_Character : public UWC_SaveGame
 {
 	GENERATED_BODY()
 	
