@@ -16,13 +16,19 @@ public:
 	// Sets default values for this component's properties
 	UWC_EquipmentComponent();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FName DefaultSocketName;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FName DefaultUnholdSocketName;
+
+	TArray<class PrimitiveComponent*> Collisions;
+	TArray<class PrimitiveComponent*> Mesh;
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 		
 };

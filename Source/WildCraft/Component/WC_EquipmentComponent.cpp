@@ -23,12 +23,3 @@ void UWC_EquipmentComponent::BeginPlay()
 	
 }
 
-
-// Called every frame
-void UWC_EquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
