@@ -7,15 +7,15 @@
 #include "WC_Player.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class WILDCRAFT_API AWC_Player : public AWC_Character
 {
 	GENERATED_BODY()
-	
-		/** Camera boom positioning the camera behind the character */
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
 	/** Follow camera */
@@ -23,8 +23,6 @@ class WILDCRAFT_API AWC_Player : public AWC_Character
 		class UCameraComponent* FollowCamera;
 
 public:
-	AWC_Player();
-
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		float BaseTurnRate;
@@ -32,6 +30,9 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		float BaseLookUpRate;
+
+public:
+	AWC_Player();
 
 protected:
 

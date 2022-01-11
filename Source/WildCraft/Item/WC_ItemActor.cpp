@@ -3,12 +3,14 @@
 
 #include "WC_ItemActor.h"
 
+
+TQueue<AWC_ItemActor*> AWC_ItemActor::_Pool;
+
+
 // Sets default values
 AWC_ItemActor::AWC_ItemActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 }
 
 // Called when the game starts or when spawned
@@ -18,10 +20,22 @@ void AWC_ItemActor::BeginPlay()
 	
 }
 
-// Called every frame
-void AWC_ItemActor::Tick(float DeltaTime)
+void AWC_ItemActor::_SetItemInstance(UWC_ItemInstance * Instance_)
 {
-	Super::Tick(DeltaTime);
-
 }
 
+AWC_ItemActor * AWC_ItemActor::New(UWC_ItemInstance * Instance_, const FVector& Location_, const FRotator& Rotation_)
+{
+	AWC_ItemActor* ret;
+
+	if (_Pool.IsEmpty())
+		ret = Instance_->GetWorld()->SpawnActor<AWC_ItemActor>(Location_, Rotation_);
+	else
+		_Pool.Dequeue(ret);
+
+	ret->SetHidden(false);
+
+	ret->_SetItemInstance(Instance_);
+
+	return ret;
+}
