@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Engine/TriggerVolume.h"
+#include "Engine/TriggerBase.h"
 #include "Character/WC_Player.h"
 #include "WC_EquipComponent.generated.h"
 
@@ -33,7 +33,7 @@ enum class EEquipmentCollision : uint8
 	EnumMax
 };
 
-DECLARE_EVENT_ThreeParams(UWC_EquipComponent, FEquipmentTriggerBeginOverlapSignature, AActor*, ATriggerVolume*, AWC_Player*);
+DECLARE_EVENT_ThreeParams(UWC_EquipComponent, FEquipmentTriggerBeginOverlapSignature, AActor*, ATriggerBase*, AWC_Player*);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WILDCRAFT_API UWC_EquipComponent : public UActorComponent
@@ -43,7 +43,7 @@ class WILDCRAFT_API UWC_EquipComponent : public UActorComponent
 
 private:
 	TArray<class AWC_ItemActor*> Equipments;// ((int)EEquipmentSlot::EnumMax);
-	TArray<class ATriggerVolume*> Triggers;// ((int)EEquipmentCollision::EnumMax);
+	TArray<class ATriggerBase*> Triggers;// ((int)EEquipmentCollision::EnumMax);
 
 
 public:	
@@ -58,4 +58,6 @@ protected:
 
 public:
 	FEquipmentTriggerBeginOverlapSignature OnTriggerBeginOverlap[(int)EEquipmentCollision::EnumMax];
+	UFUNCTION()
+		void OnTriggerBeginOverlapFunc(AActor* actor, AActor* other);
 };
