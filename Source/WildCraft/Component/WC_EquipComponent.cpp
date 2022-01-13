@@ -35,7 +35,7 @@ void UWC_EquipComponent::BeginPlay()
 		case EEquipmentCollision::E1:
 		case EEquipmentCollision::E2:
 		case EEquipmentCollision::E3:
-			Triggers[i] = GetWorld()->SpawnActor<ATriggerCapsule>();
+			//Triggers[i] = GetWorld()->SpawnActor<ATriggerCapsule>();
 			break;
 		default:
 			break;
@@ -78,7 +78,7 @@ void UWC_EquipComponent::BeginPlay()
 	Triggers[(int)EEquipmentCollision::LH]->OnActorBeginOverlap.AddDynamic(this, &UWC_EquipComponent::OnTriggerBeginOverlapFunc);
 	Triggers[(int)EEquipmentCollision::RH]->OnActorBeginOverlap.AddDynamic(this, &UWC_EquipComponent::OnTriggerBeginOverlapFunc);
 	Triggers[(int)EEquipmentCollision::LF]->OnActorBeginOverlap.AddDynamic(this, &UWC_EquipComponent::OnTriggerBeginOverlapFunc);
-	Triggers[(int)EEquipmentCollision::RH]->OnActorBeginOverlap.AddDynamic(this, &UWC_EquipComponent::OnTriggerBeginOverlapFunc);
+	Triggers[(int)EEquipmentCollision::RF]->OnActorBeginOverlap.AddDynamic(this, &UWC_EquipComponent::OnTriggerBeginOverlapFunc);
 
 	Triggers[(int)EEquipmentCollision::LH]->SetActorLabel(TEXT("Left Hand Trigger"));
 	Triggers[(int)EEquipmentCollision::RH]->SetActorLabel(TEXT("Right Hand Trigger"));
@@ -92,8 +92,11 @@ void UWC_EquipComponent::OnTriggerBeginOverlapFunc(AActor * actor, AActor * othe
 	if (other == GetOwner())
 		return;
 
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Cyan, FString::Printf(TEXT("%s hitted by %s : %s"), *other->GetActorLabel(), *actor->GetActorLabel(),
-		*(actor->GetVelocity() - other->GetVelocity()).ToString()));
+	if (Triggers.Find(other) != INDEX_NONE)
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Cyan, FString::Printf(TEXT("%s hitted by %s"), *other->GetActorLabel(), *actor->GetActorLabel()));
+	//,*(actor->GetVelocity() - other->GetVelocity()).ToString()));
 	//UE_LOG(LogTemp, Display, TEXT("wow"));
 }
 

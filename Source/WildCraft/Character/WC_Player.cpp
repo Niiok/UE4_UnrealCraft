@@ -57,7 +57,7 @@ AWC_Player::AWC_Player()
 void AWC_Player::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	//Super::SetupPlayerInputComponent(PlayerInputComponent);
-	if (!!AbilitySystem)
+	/*if (!!AbilitySystem)
 	{
 
 		AbilitySystem->BindToInputComponent(PlayerInputComponent);
@@ -88,12 +88,12 @@ void AWC_Player::SetupPlayerInputComponent(class UInputComponent* PlayerInputCom
 			}
 	}
 	else
-		UE_LOG(LogTemp, Error, TEXT("Ability System doesn't exists while input binding"));
+		UE_LOG(LogTemp, Error, TEXT("Ability System doesn't exists while input binding"));*/
 
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	//PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AWC_Player::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AWC_Player::MoveRight);

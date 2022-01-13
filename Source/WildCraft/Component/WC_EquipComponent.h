@@ -43,7 +43,7 @@ class WILDCRAFT_API UWC_EquipComponent : public UActorComponent
 
 private:
 	TArray<class AWC_ItemActor*> Equipments;// ((int)EEquipmentSlot::EnumMax);
-	TArray<class ATriggerBase*> Triggers;// ((int)EEquipmentCollision::EnumMax);
+	TArray<class AActor*> Triggers;// ((int)EEquipmentCollision::EnumMax);
 
 
 public:	
