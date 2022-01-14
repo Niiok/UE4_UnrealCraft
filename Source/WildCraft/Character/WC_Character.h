@@ -15,11 +15,12 @@ class WILDCRAFT_API AWC_Character : public ACharacter
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
+		class UAbilitySystemComponent* AbilitySystem;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
 		UGameplayAbilitySet* AbilitySet;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
-		class UAbilitySystemComponent* AbilitySystem;
 
 
 public:

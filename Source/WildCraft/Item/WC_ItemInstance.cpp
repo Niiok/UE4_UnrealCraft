@@ -35,9 +35,8 @@ void UWC_ItemInstance::_Load()
 	if (_Loaded)
 		return;
 
-	const FString reference = TEXT("DataTable'/Game/WildCraft/Item/ItemIdeal.ItemIdeal'");
 
-	ConstructorHelpers::FObjectFinder<UDataTable> helper(*reference);
+	ConstructorHelpers::FObjectFinder<UDataTable> helper(TEXT("DataTable'/Game/WildCraft/Item/ItemIdeal.ItemIdeal'"));
 	if (helper.Succeeded())
 	{
 		UDataTable* table = helper.Object;

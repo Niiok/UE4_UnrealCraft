@@ -20,21 +20,6 @@ enum class EEquipmentSlot : uint8
 	EnumMax
 };
 
-UENUM(BlueprintType)
-enum class EEquipmentCollision : uint8
-{
-	LH,
-	RH,
-	LF,
-	RF,
-	E1,
-	E2,
-	E3,
-	EnumMax
-};
-
-DECLARE_EVENT_ThreeParams(UWC_EquipComponent, FEquipmentTriggerBeginOverlapSignature, AActor*, ATriggerBase*, AWC_Player*);
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WILDCRAFT_API UWC_EquipComponent : public UActorComponent
 {
@@ -43,7 +28,6 @@ class WILDCRAFT_API UWC_EquipComponent : public UActorComponent
 
 private:
 	TArray<class AWC_ItemActor*> Equipments;// ((int)EEquipmentSlot::EnumMax);
-	TArray<class AActor*> Triggers;// ((int)EEquipmentCollision::EnumMax);
 
 
 public:	
@@ -53,11 +37,4 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-		
-
-public:
-	FEquipmentTriggerBeginOverlapSignature OnTriggerBeginOverlap[(int)EEquipmentCollision::EnumMax];
-	UFUNCTION()
-		void OnTriggerBeginOverlapFunc(AActor* actor, AActor* other);
 };
