@@ -18,7 +18,7 @@ enum class ELimb : uint8
 	E2,
 	E3,
 	E4,
-	EnumTotal
+	ELIMB_MAX
 };
 
 //DECLARE_EVENT_ThreeParams(ULimbComponent, FLimbOverlapSignature, AActor*, ATriggerBase*, AWC_Player*);
@@ -56,7 +56,34 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+
+
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetLimbCollisionResponse(ELimb limb, ECollisionResponse response);
+
+	UFUNCTION(BlueprintCallable)
+		ECollisionResponse GetLimbCollisionResponse(ELimb limb);
+
+private:
 	FName GetSocketName(ELimb limb);
 
-	void OnLimbBeginOverlapFunc(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+private:
+	UFUNCTION()
+		void OnLimbBeginOverlapFunc(
+			UPrimitiveComponent* OverlappedComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex,
+			bool bFromSweep, 
+			const FHitResult & SweepResult
+		);
+	UFUNCTION()
+		void OnLimbHitFunc(
+			UPrimitiveComponent* HitComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp,
+			FVector NormalImpulse,
+			const FHitResult& Hit
+		);
 };

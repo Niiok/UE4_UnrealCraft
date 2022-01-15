@@ -10,14 +10,14 @@ ULimbComponent::ULimbComponent()
 {
 	SocketName_LeftHand = TEXT("hand_l");
 	SocketName_RightHand = TEXT("hand_r");
-	SocketName_LeftFoot = TEXT("ball_l");
-	SocketName_RightFoot = TEXT("ball_r");
-	SocketName_Extra1 = TEXT("");
-	SocketName_Extra2 = TEXT("");
-	SocketName_Extra3 = TEXT("");
-	SocketName_Extra4 = TEXT("");
+	SocketName_LeftFoot = TEXT("foot_l");
+	SocketName_RightFoot = TEXT("foot_r");
+	SocketName_Extra1 = FName();
+	SocketName_Extra2 = FName();
+	SocketName_Extra3 = FName();
+	SocketName_Extra4 = FName();
 
-	LimbSpheres.Init(NULL, (int)ELimb::EnumTotal);
+	LimbSpheres.Init(NULL, (int)ELimb::ELIMB_MAX);
 	// ...
 
 	//generate spheres
@@ -29,22 +29,27 @@ void ULimbComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (int i = 0; i < (int)ELimb::EnumTotal; ++i)
+	for (int i = 0; i < (int)ELimb::ELIMB_MAX; ++i)
 	{
 		if (GetSocketName((ELimb)i) == TEXT(""))
 			continue;
 
-		LimbSpheres[i] = NewObject<USphereComponent>(GetOwner(), GetSocketName((ELimb)i));
-		LimbSpheres[i]->RegisterComponent();
-		LimbSpheres[i]->SetupAttachment(GetOwner()->GetRootComponent());
-		if (LimbSpheres[i]->bWantsInitializeComponent)
-			LimbSpheres[i]->InitializeComponent();
+		//LimbSpheres[i] = Cast<UPrimitiveComponent>(CreateDefaultSubobject<USphereComponent>(GetSocketName((ELimb)i)));
 
-		//LimbSpheres[i] = Cast<UPrimitiveComponent>(GetOwner()->CreateDefaultSubobject<USphereComponent>(GetSocketName((ELimb)i)));
-		LimbSpheres[i]->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
+		USphereComponent* NewComponent = NewObject<USphereComponent>(GetOwner(), GetSocketName((ELimb)i));
+		check(NewComponent);
+		LimbSpheres[i] = NewComponent;
 
+		NewComponent->OnComponentCreated();
+		NewComponent->RegisterComponent();
+		NewComponent->SetupAttachment(GetOwner()->GetRootComponent());
+		if (NewComponent->bWantsInitializeComponent)
+			NewComponent->InitializeComponent();
 
-		LimbSpheres[i]->AttachToComponent(
+		UE_LOG(LogTemp, Display, TEXT("Generated %s"), *GetSocketName((ELimb)i).ToString());
+
+		NewComponent->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
+		NewComponent->AttachToComponent(
 			Cast<ACharacter>(GetOwner())->GetMesh(),
 			FAttachmentTransformRules(
 				EAttachmentRule::SnapToTarget,
@@ -54,16 +59,51 @@ void ULimbComponent::BeginPlay()
 			GetSocketName((ELimb)i)
 		);
 
-		LimbSpheres[i]->OnComponentBeginOverlap.AddDynamic(this, &ULimbComponent::OnLimbBeginOverlapFunc);
+		NewComponent->OnComponentBeginOverlap.AddDynamic(this, &ULimbComponent::OnLimbBeginOverlapFunc);
+		NewComponent->OnComponentHit.AddDynamic(this, &ULimbComponent::OnLimbHitFunc);
 
-		LimbSpheres[i]->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Block);
-		LimbSpheres[i]->SetVisibility(true);
+		NewComponent->SetGenerateOverlapEvents(true);
+		NewComponent->SetVisibility(true);
+		NewComponent->SetHiddenInGame(false);
+		NewComponent->SetCollisionProfileName(TEXT("BlockAll") );
+		NewComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		NewComponent->UpdateCollisionProfile();
+
+		//NewComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Block);
+	}	
+}
+
+void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse response)
+{
+	if (GetSocketName(limb) == FName())
+		return;
+
+	switch (limb)
+	{
+	case ELimb::ELIMB_MAX:
+		for (int i = 0; i < (int)ELimb::ELIMB_MAX; ++i)
+			SetLimbCollisionResponse((ELimb)i, response);
+		break;
+
+	default:
+		LimbSpheres[(int)limb]->SetCollisionResponseToAllChannels(response);
+		break;
 	}
+}
 
-	// ...
-	// change channel
-	// not visible
-	
+ECollisionResponse ULimbComponent::GetLimbCollisionResponse(ELimb limb)
+{
+	switch (limb)
+	{
+	case ELimb::ELIMB_MAX:
+		return ECollisionResponse::ECR_MAX;
+
+	default:
+		if (GetSocketName(limb) == FName())
+			return ECollisionResponse::ECR_MAX;
+		else
+			return LimbSpheres[(int)limb]->GetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn);
+	}
 }
 
 FName ULimbComponent::GetSocketName(ELimb limb)
@@ -102,4 +142,15 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Cyan, FString::Printf(TEXT("%s hitted by %s"), *OverlappedComponent->GetName(), *OtherActor->GetActorLabel()));
 	//,*(actor->GetVelocity() - other->GetVelocity()).ToString()));
 	//UE_LOG(LogTemp, Display, TEXT("wow"));
+}
+
+void ULimbComponent::OnLimbHitFunc(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{	
+	if (OtherActor == GetOwner())
+		return;
+
+	if (LimbSpheres.Find(OtherComp) != INDEX_NONE)
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Cyan, FString::Printf(TEXT("%s hitted by %s"), *HitComponent->GetName(), *OtherActor->GetActorLabel()));
 }
