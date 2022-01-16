@@ -46,6 +46,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_Extra4;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+		float DefaultRadius = 10;
+
 	TArray<UPrimitiveComponent*> LimbSpheres;
 
 public:	
