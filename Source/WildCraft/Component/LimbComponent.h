@@ -7,6 +7,8 @@
 #include "LimbComponent.generated.h"
 
 
+/*
+ */
 UENUM(BlueprintType)
 enum class ELimb : uint8
 {
@@ -23,30 +25,32 @@ enum class ELimb : uint8
 
 //DECLARE_EVENT_ThreeParams(ULimbComponent, FLimbOverlapSignature, AActor*, ATriggerBase*, AWC_Player*);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+/*
+ */
+UCLASS(ClassGroup = "Custom", meta = (BlueprintSpawnableComponent))
 class WILDCRAFT_API ULimbComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_LeftHand;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_RightHand;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_LeftFoot;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_RightFoot;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_Extra1;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_Extra2;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_Extra3;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		FName SocketName_Extra4;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Limb", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		float DefaultRadius = 10;
 
 	TArray<UPrimitiveComponent*> LimbSpheres;

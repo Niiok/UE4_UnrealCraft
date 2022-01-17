@@ -21,7 +21,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
 		UGameplayAbilitySet* AbilitySet;
 
-
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
+		class ULimbComponent* Limb;
 
 public:
 	AWC_Character();

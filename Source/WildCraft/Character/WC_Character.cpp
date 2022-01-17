@@ -6,6 +6,7 @@
 #include "GameplayAbilitySpec.h"
 //#include "GameplayTaskComponent.h"
 #include "GAS/WC_AttributeSet_Sample.h"
+#include "Component/LimbComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -13,6 +14,7 @@
 AWC_Character::AWC_Character()
 {
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	Limb = CreateDefaultSubobject<ULimbComponent>(TEXT("Limb"));
 	//AbilityComponent->
 }
 

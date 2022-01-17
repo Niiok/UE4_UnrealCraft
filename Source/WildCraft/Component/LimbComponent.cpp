@@ -48,7 +48,7 @@ void ULimbComponent::BeginPlay()
 
 		UE_LOG(LogTemp, Display, TEXT("Generated %s"), *GetSocketName((ELimb)i).ToString());
 
-		NewComponent->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
+		//NewComponent->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
 		NewComponent->SetSphereRadius(DefaultRadius);
 		NewComponent->AttachToComponent(
 			Cast<ACharacter>(GetOwner())->GetMesh(),
