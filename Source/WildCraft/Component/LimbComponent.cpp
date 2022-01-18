@@ -63,6 +63,8 @@ void ULimbComponent::BeginPlay()
 		NewComponent->OnComponentBeginOverlap.AddDynamic(this, &ULimbComponent::OnLimbBeginOverlapFunc);
 		NewComponent->OnComponentHit.AddDynamic(this, &ULimbComponent::OnLimbHitFunc);
 
+
+		// physic, collision, overlap
 		NewComponent->SetGenerateOverlapEvents(true);
 		NewComponent->SetVisibility(true);
 		NewComponent->SetHiddenInGame(false);
@@ -70,14 +72,14 @@ void ULimbComponent::BeginPlay()
 		NewComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		NewComponent->UpdateCollisionProfile();
 
+
 		//NewComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Block);
 	}	
+	SetLimbCollisionResponse(ELimb::ELIMB_MAX, ECollisionResponse::ECR_Ignore);
 }
 
 void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse response)
 {
-	if (GetSocketName(limb) == FName())
-		return;
 
 	switch (limb)
 	{
@@ -87,7 +89,25 @@ void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse res
 		break;
 
 	default:
+		if (GetSocketName(limb) == FName())
+			return;
 		LimbSpheres[(int)limb]->SetCollisionResponseToAllChannels(response);
+		switch (response)
+		{
+		case ECR_Ignore:
+			LimbSpheres[(int)limb]->SetHiddenInGame(true);
+			LimbSpheres[(int)limb]->SetVisibility(false);
+			break;
+		case ECR_Overlap:
+		case ECR_Block:
+			LimbSpheres[(int)limb]->SetHiddenInGame(false);
+			LimbSpheres[(int)limb]->SetVisibility(true);
+			break;
+		case ECR_MAX:
+			break;
+		default:
+			break;
+		}
 		break;
 	}
 }
