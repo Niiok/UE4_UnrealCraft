@@ -10,7 +10,7 @@
 
 UCLASS()
 class WILDCRAFT_API AWC_Character : public ACharacter
-	, public IAbilitySystemInterface
+	, public IAbilitySystemInterface, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
@@ -23,6 +23,10 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
 		class ULimbComponent* Limb;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
+		float MaxHP = 100.0f;
+		float CurrentHP;
 
 public:
 	AWC_Character();
@@ -42,6 +46,11 @@ public:
 
 	virtual void PostInitializeComponents() override;
 
+
+
 	// IAbilitySystemInterface을(를) 통해 상속됨
 	virtual UAbilitySystemComponent * GetAbilitySystemComponent() const override;
+
+	// IGameplayTagAssetInterface을(를) 통해 상속됨
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer & TagContainer) const override;
 };

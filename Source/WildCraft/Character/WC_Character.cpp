@@ -15,7 +15,7 @@ AWC_Character::AWC_Character()
 {
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	Limb = CreateDefaultSubobject<ULimbComponent>(TEXT("Limb"));
-	//AbilityComponent->
+	CurrentHP = MaxHP;
 }
 
 void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
@@ -33,6 +33,9 @@ void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
+	if (CurrentHP != 0)
+		CurrentHP = FMath::Clamp<float>(CurrentHP - DamageAmount, 0, MaxHP);
+
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
@@ -50,4 +53,9 @@ void AWC_Character::PostInitializeComponents()
 UAbilitySystemComponent * AWC_Character::GetAbilitySystemComponent() const
 {
 	return AbilitySystem;
+}
+
+void AWC_Character::GetOwnedGameplayTags(FGameplayTagContainer & TagContainer) const
+{
+	return AbilitySystem->GetOwnedGameplayTags(TagContainer);
 }

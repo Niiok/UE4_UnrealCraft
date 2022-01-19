@@ -54,6 +54,7 @@ protected:
 		float DefaultRadius = 10;
 
 	TArray<UPrimitiveComponent*> LimbSpheres;
+	TSet<AActor*> HitRecord;
 
 public:	
 	// Sets default values for this component's properties

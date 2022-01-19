@@ -65,12 +65,12 @@ void ULimbComponent::BeginPlay()
 
 
 		// physic, collision, overlap
-		NewComponent->SetGenerateOverlapEvents(true);
-		NewComponent->SetVisibility(true);
-		NewComponent->SetHiddenInGame(false);
-		NewComponent->SetCollisionProfileName(TEXT("BlockAll") );
+		NewComponent->SetCollisionProfileName(TEXT("PhysicsActor") );
 		NewComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		NewComponent->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+		NewComponent->SetNotifyRigidBodyCollision(true);
 		NewComponent->UpdateCollisionProfile();
+
 
 
 		//NewComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Block);
@@ -80,7 +80,6 @@ void ULimbComponent::BeginPlay()
 
 void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse response)
 {
-
 	switch (limb)
 	{
 	case ELimb::ELIMB_MAX:
@@ -102,6 +101,7 @@ void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse res
 		case ECR_Block:
 			LimbSpheres[(int)limb]->SetHiddenInGame(false);
 			LimbSpheres[(int)limb]->SetVisibility(true);
+			HitRecord.Empty();
 			break;
 		case ECR_MAX:
 			break;
@@ -156,22 +156,29 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 {
 	if (OtherActor == GetOwner())
 		return;
-
-	if (LimbSpheres.Find(OtherComp) != INDEX_NONE)
+	if (LimbSpheres.Contains(OtherComp))
 		return;
+	if (HitRecord.Contains(OtherActor))
+		return;
+	else
+		HitRecord.Add(OtherActor);
 
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Cyan, FString::Printf(TEXT("%s hitted by %s"), *OverlappedComponent->GetName(), *OtherActor->GetActorLabel()));
-	//,*(actor->GetVelocity() - other->GetVelocity()).ToString()));
-	//UE_LOG(LogTemp, Display, TEXT("wow"));
+
+	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("%s overlap %s : %d"), *OverlappedComponent->GetName(), *OtherActor->GetActorLabel(), SweepResult.ImpactNormal.Size()));
 }
 
 void ULimbComponent::OnLimbHitFunc(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {	
 	if (OtherActor == GetOwner())
 		return;
-
-	if (LimbSpheres.Find(OtherComp) != INDEX_NONE)
+	if (LimbSpheres.Contains(OtherComp))
 		return;
+	if (HitRecord.Contains(OtherActor))
+		return;
+	else
+		HitRecord.Add(OtherActor);
 
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Cyan, FString::Printf(TEXT("%s hitted by %s"), *HitComponent->GetName(), *OtherActor->GetActorLabel()));
+
+
+	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("%s hit %s"), *HitComponent->GetName(), *OtherActor->GetActorLabel()));
 }
