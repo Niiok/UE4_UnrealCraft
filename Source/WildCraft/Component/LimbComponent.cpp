@@ -4,6 +4,7 @@
 #include "LimbComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/SphereComponent.h"
+#include "Character/WC_Character.h"
 
 // Sets default values for this component's properties
 ULimbComponent::ULimbComponent()
@@ -163,6 +164,9 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 	else
 		HitRecord.Add(OtherActor);
 
+	AWC_Character* character = Cast<AWC_Character>(OtherActor);
+	if (character)
+		character->SetRagdoll(true);
 
 	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("%s overlap %s : %d"), *OverlappedComponent->GetName(), *OtherActor->GetActorLabel(), SweepResult.ImpactNormal.Size()));
 }

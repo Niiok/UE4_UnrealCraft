@@ -28,8 +28,16 @@ protected:
 		float MaxHP = 100.0f;
 		float CurrentHP;
 
+private:
+		FTransform MeshRelativeTransform;
+		bool bRagdoll = false;
+
 public:
 	AWC_Character();
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
 		void AddAbility(TSubclassOf<UGameplayAbility> Ability);
@@ -45,6 +53,12 @@ public:
 	) override;
 
 	virtual void PostInitializeComponents() override;
+
+	UFUNCTION(BlueprintCallable)
+		void SetRagdoll(bool bEnabled);
+
+	UFUNCTION(BlueprintCallable)
+		inline bool IsRagdoll() { return bRagdoll; }
 
 
 

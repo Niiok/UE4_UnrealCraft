@@ -7,6 +7,8 @@
 //#include "GameplayTaskComponent.h"
 #include "GAS/WC_AttributeSet_Sample.h"
 #include "Component/LimbComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -16,6 +18,13 @@ AWC_Character::AWC_Character()
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	Limb = CreateDefaultSubobject<ULimbComponent>(TEXT("Limb"));
 	CurrentHP = MaxHP;
+}
+
+void AWC_Character::BeginPlay()
+{
+	Super::BeginPlay();
+
+	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
 }
 
 void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
@@ -46,6 +55,58 @@ void AWC_Character::PostInitializeComponents()
 	if (AbilitySystem)
 	{
 		AbilitySystem->InitStats(UWC_AttributeSet_Sample::StaticClass(), NULL);
+	}
+}
+
+void AWC_Character::SetRagdoll(bool bEnabled)
+{
+	UCapsuleComponent* cap = GetCapsuleComponent();
+	USkeletalMeshComponent* mesh = GetMesh();
+	USpringArmComponent* spring = Cast<USpringArmComponent>(GetComponentByClass(USpringArmComponent::StaticClass()));
+
+	bRagdoll = bEnabled;
+
+	if (bRagdoll)
+	{
+		mesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		mesh->SetSimulatePhysics(true);
+		mesh->SetCollisionProfileName(TEXT("Ragdoll"));
+
+		RootComponent = mesh;
+
+		cap->AttachToComponent(mesh, 
+			FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true));
+		cap->SetMassOverrideInKg(NAME_None, 0.0f, true);
+		cap->SetCollisionProfileName(TEXT("CharacterMesh"));
+
+		if (spring)
+		{
+			spring->bDoCollisionTest = false;
+			//spring->AttachToComponent(mesh, FAttachmentTransformRules::KeepRelativeTransform);
+		}
+
+		mesh->AddImpulse(mesh->GetRightVector()*mesh->GetMass()*100);
+	}
+	else
+	{
+		cap->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		cap->SetWorldLocation(mesh->GetRelativeLocation() + FVector(0, 0, cap->GetScaledCapsuleHalfHeight()));
+		cap->SetWorldRotation(FRotator(0, mesh->GetRelativeRotation().Yaw - MeshRelativeTransform.Rotator().Yaw, 0));
+		cap->SetMassOverrideInKg(NAME_None, 0.0f, false);
+		cap->SetCollisionProfileName(TEXT("Pawn"));
+
+		RootComponent = cap;
+
+		mesh->SetSimulatePhysics(false);
+		mesh->SetCollisionProfileName(TEXT("CharacterMesh"));
+		mesh->AttachToComponent(cap, FAttachmentTransformRules::KeepWorldTransform);
+		mesh->SetRelativeTransform(MeshRelativeTransform);
+
+		if (spring)
+		{
+			spring->bDoCollisionTest = true;
+			//spring->AttachToComponent(cap, FAttachmentTransformRules::KeepRelativeTransform);
+		}
 	}
 }
 
