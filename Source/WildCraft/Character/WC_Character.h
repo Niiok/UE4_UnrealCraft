@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "VoxelCharacter.h"
 #include "GameplayAbilitySet.h"
 #include "AbilitySystemInterface.h"
 #include "WC_Character.generated.h"
 
 UCLASS()
-class WILDCRAFT_API AWC_Character : public ACharacter
+class WILDCRAFT_API AWC_Character : public AVoxelCharacter
 	, public IAbilitySystemInterface, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()

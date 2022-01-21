@@ -70,7 +70,6 @@ void ULimbComponent::BeginPlay()
 		NewComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		NewComponent->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 		NewComponent->SetNotifyRigidBodyCollision(true);
-		NewComponent->UpdateCollisionProfile();
 
 
 
