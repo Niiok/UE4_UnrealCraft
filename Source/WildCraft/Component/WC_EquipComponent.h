@@ -12,11 +12,26 @@
 UENUM(BlueprintType)
 enum class EEquipmentSlot : uint8
 {
+	LeftHand,
+	RightHand,
 	Head,
 	Chest,
 	Legs,
 	Hands,
 	Feet,
+	EnumMax
+};
+
+UENUM(BlueprintType)
+enum class EEquipMode : uint8
+{
+	OneHand,
+	TwoHand,
+	DoubleHand,
+	SwordShield,
+	Bow,
+	Throw,
+	// ...
 	EnumMax
 };
 

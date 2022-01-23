@@ -67,8 +67,8 @@ void ULimbComponent::BeginPlay()
 
 		// physic, collision, overlap
 		NewComponent->SetCollisionProfileName(TEXT("PhysicsActor") );
-		NewComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		NewComponent->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+		//NewComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		//NewComponent->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 		NewComponent->SetNotifyRigidBodyCollision(true);
 
 
