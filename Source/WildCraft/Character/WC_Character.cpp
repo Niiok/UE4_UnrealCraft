@@ -9,6 +9,7 @@
 #include "Component/LimbComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/WidgetComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -18,6 +19,19 @@ AWC_Character::AWC_Character()
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	Limb = CreateDefaultSubobject<ULimbComponent>(TEXT("Limb"));
 	CurrentHP = MaxHP;
+	Widget_HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBar"));
+
+	Widget_HPBar->SetupAttachment(GetMesh());
+
+	Widget_HPBar->SetRelativeLocation(
+		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));
+	Widget_HPBar->SetWidgetSpace(EWidgetSpace::Screen);
+	static ConstructorHelpers::FClassFinder<UUserWidget> hpbar_class(TEXT("WidgetBlueprint'/Game/WildCraft/UI/WB_HPBar.WB_HPBar_C'"));
+	if (hpbar_class.Succeeded())
+	{
+		Widget_HPBar->SetWidgetClass(hpbar_class.Class);
+		Widget_HPBar->SetDrawSize(FVector2D(150.0f, 50.0f));
+	}
 }
 
 void AWC_Character::BeginPlay()
@@ -25,6 +39,9 @@ void AWC_Character::BeginPlay()
 	Super::BeginPlay();
 
 	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
+
+	/*Widget_HPBar->SetRelativeLocation(
+		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));*/
 }
 
 void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)

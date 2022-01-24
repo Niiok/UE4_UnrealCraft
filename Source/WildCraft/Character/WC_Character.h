@@ -29,6 +29,9 @@ protected:
 		float MaxHP = 100.0f;
 		float CurrentHP;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "UI"/*",meta=(AllowPrivateAccess=true))*/)
+		class UWidgetComponent* Widget_HPBar;
+
 private:
 		FTransform MeshRelativeTransform;
 		bool bRagdoll = false;

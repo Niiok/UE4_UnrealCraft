@@ -36,7 +36,7 @@ void UWC_ItemInstance::_Load()
 		return;
 
 
-	ConstructorHelpers::FObjectFinder<UDataTable> helper(TEXT("DataTable'/Game/WildCraft/Item/ItemIdeal.ItemIdeal'"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> helper(TEXT("DataTable'/Game/WildCraft/Item/ItemIdeal.ItemIdeal'"));
 	if (helper.Succeeded())
 	{
 		UDataTable* table = helper.Object;

@@ -18,12 +18,12 @@ public class WildCraft : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "GameplayAbilities", "GameplayTags", "GameplayTasks" });
 
-        PublicDependencyModuleNames.AddRange(new string[] { "AIModule" });
+        PublicDependencyModuleNames.AddRange(new string[] { "AIModule", "UMG" });
 
 		//PrivateDependencyModuleNames.AddRange(new string[] {  });
 
 		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+		//PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
 		
 		// Uncomment if you are using online features
