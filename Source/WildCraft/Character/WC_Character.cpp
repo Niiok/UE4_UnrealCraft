@@ -59,6 +59,9 @@ void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
+	UGameplayEffect damage;
+	damage
+
 	if (CurrentHP != 0)
 		CurrentHP = FMath::Clamp<float>(CurrentHP - DamageAmount, 0, MaxHP);
 
