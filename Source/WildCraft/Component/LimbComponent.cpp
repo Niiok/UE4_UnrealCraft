@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "Components/SphereComponent.h"
 #include "Character/WC_Character.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
 ULimbComponent::ULimbComponent()
@@ -99,9 +100,9 @@ void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse res
 			break;
 		case ECR_Overlap:
 		case ECR_Block:
+			HitRecord.Empty();
 			LimbSpheres[(int)limb]->SetHiddenInGame(false);
 			LimbSpheres[(int)limb]->SetVisibility(true);
-			HitRecord.Empty();
 			break;
 		case ECR_MAX:
 			break;
@@ -164,10 +165,35 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 		HitRecord.Add(OtherActor);
 
 	AWC_Character* character = Cast<AWC_Character>(OtherActor);
+
+	//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("%s overlap %s : %d"), *OverlappedComponent->GetName(), *OtherActor->GetActorLabel(), SweepResult.ImpactNormal.Size()));
+	int duration = 10;
+	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+		TEXT("%s"), *SweepResult.ToString()));
+	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+		TEXT("SweepResult : ")));
+	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+		TEXT("bFromSweep : %s"), bFromSweep ? TEXT("true") : TEXT("false")));
+	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+		TEXT("OtherBodyIndex : %d"), OtherBodyIndex));
+	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+		TEXT("OtherComp : %s"), *OtherComp->GetName()));
+	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+		TEXT("OtherActor : %s"), *OtherActor->GetName()));
+	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+		TEXT("OverlappedComponent : %s"), *OverlappedComponent->GetName()));
+
+	if (OtherComp->IsSimulatingPhysics() == true)
+	{
+		//UKismetSystemLibrary::SphereTraceSingle(
+		//	GetWorld(), OverlappedComponent->GetComponentLocation(), OtherComp->GetComponentLocation(), Cast<USphereComponent>(OverlappedComponent)->GetScaledSphereRadius(), ETraceTypeQuery::TraceTypeQuery1, )
+
+		OtherComp->AddImpulseAtLocation(OverlappedComponent->GetOwner()->GetVelocity() * OtherComp->GetMass() * 2, OverlappedComponent->GetComponentLocation());
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("simulating")));
+	}
+
 	if (character)
 		character->SetRagdoll(true);
-
-	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("%s overlap %s : %d"), *OverlappedComponent->GetName(), *OtherActor->GetActorLabel(), SweepResult.ImpactNormal.Size()));
 }
 
 void ULimbComponent::OnLimbHitFunc(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)

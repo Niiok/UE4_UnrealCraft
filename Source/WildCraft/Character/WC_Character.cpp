@@ -5,7 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilitySpec.h"
 //#include "GameplayTaskComponent.h"
-#include "GAS/WC_AttributeSet_Sample.h"
+#include "GAS/WC_AttributeSet_Character.h"
 #include "Component/LimbComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -40,6 +40,9 @@ void AWC_Character::BeginPlay()
 
 	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
 
+	if (GetAbilitySystemComponent() != nullptr)
+		AttributeSet = GetAbilitySystemComponent()->GetSet<class UWC_AttributeSet_Character>();
+
 	/*Widget_HPBar->SetRelativeLocation(
 		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));*/
 }
@@ -59,8 +62,12 @@ void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
+	//FGameplayEffectSpec()
+	//GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf()
+
+	/*
 	UGameplayEffect damage;
-	damage
+	damage*/
 
 	if (CurrentHP != 0)
 		CurrentHP = FMath::Clamp<float>(CurrentHP - DamageAmount, 0, MaxHP);
@@ -74,7 +81,7 @@ void AWC_Character::PostInitializeComponents()
 
 	if (AbilitySystem)
 	{
-		AbilitySystem->InitStats(UWC_AttributeSet_Sample::StaticClass(), NULL);
+		AbilitySystem->InitStats(UWC_AttributeSet_Character::StaticClass(), NULL);
 	}
 }
 

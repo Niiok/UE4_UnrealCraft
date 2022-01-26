@@ -1,60 +1,60 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "WC_AttributeSet.h"
+#include "WC_AttributeSet_Character.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
 #include "Character/WC_Character.h"
 
-void UWC_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UWC_AttributeSet_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UWC_AttributeSet, Health);
-	DOREPLIFETIME(UWC_AttributeSet, MaxHealth);
-	DOREPLIFETIME(UWC_AttributeSet, Mana);
-	DOREPLIFETIME(UWC_AttributeSet, MaxMana);
-	DOREPLIFETIME(UWC_AttributeSet, AttackPower);
-	DOREPLIFETIME(UWC_AttributeSet, DefensePower);
-	DOREPLIFETIME(UWC_AttributeSet, MoveSpeed);
+	DOREPLIFETIME(UWC_AttributeSet_Character, Health);
+	DOREPLIFETIME(UWC_AttributeSet_Character, MaxHealth);
+	DOREPLIFETIME(UWC_AttributeSet_Character, Mana);
+	DOREPLIFETIME(UWC_AttributeSet_Character, MaxMana);
+	DOREPLIFETIME(UWC_AttributeSet_Character, AttackPower);
+	DOREPLIFETIME(UWC_AttributeSet_Character, DefensePower);
+	DOREPLIFETIME(UWC_AttributeSet_Character, MoveSpeed);
 }
 
-void UWC_AttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
+void UWC_AttributeSet_Character::OnRep_Health(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet, Health, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet_Character, Health, OldValue);
 }
 
-void UWC_AttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
+void UWC_AttributeSet_Character::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet, MaxHealth, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet_Character, MaxHealth, OldValue);
 }
 
-void UWC_AttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue)
+void UWC_AttributeSet_Character::OnRep_Mana(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet, Mana, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet_Character, Mana, OldValue);
 }
 
-void UWC_AttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue)
+void UWC_AttributeSet_Character::OnRep_MaxMana(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet, MaxMana, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet_Character, MaxMana, OldValue);
 }
 
-void UWC_AttributeSet::OnRep_AttackPower(const FGameplayAttributeData& OldValue)
+void UWC_AttributeSet_Character::OnRep_AttackPower(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet, AttackPower, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet_Character, AttackPower, OldValue);
 }
 
-void UWC_AttributeSet::OnRep_DefensePower(const FGameplayAttributeData& OldValue)
+void UWC_AttributeSet_Character::OnRep_DefensePower(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet, DefensePower, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet_Character, DefensePower, OldValue);
 }
 
-void UWC_AttributeSet::OnRep_MoveSpeed(const FGameplayAttributeData& OldValue)
+void UWC_AttributeSet_Character::OnRep_MoveSpeed(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet, MoveSpeed, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UWC_AttributeSet_Character, MoveSpeed, OldValue);
 }
 
-void UWC_AttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
+void UWC_AttributeSet_Character::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
 {
 	UAbilitySystemComponent* AbilityComp = GetOwningAbilitySystemComponent();
 	const float CurrentMaxValue = MaxAttribute.GetCurrentValue();
@@ -68,7 +68,7 @@ void UWC_AttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& Affec
 	}
 }
 
-void UWC_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+void UWC_AttributeSet_Character::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	// This is called whenever attributes change, so for max health/mana we want to scale the current totals to match
 	Super::PreAttributeChange(Attribute, NewValue);
@@ -83,7 +83,7 @@ void UWC_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	}
 }
 
-//void UWC_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+//void UWC_AttributeSet_Character::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 //{
 //	Super::PostGameplayEffectExecute(Data);
 //
