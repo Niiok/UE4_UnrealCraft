@@ -37,6 +37,7 @@ protected:
 private:
 		FTransform MeshRelativeTransform;
 		bool bRagdoll = false;
+		//class AAIController* AiController;
 
 public:
 	AWC_Character();

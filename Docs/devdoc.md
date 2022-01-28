@@ -14,9 +14,9 @@
   - 리플리케이션 상정
   - GameFramework 추종 모듈화
 - 월드, 전투	12/28 ~ 12/30 
-  - 공통
-  - 이동, 공격, 점프
-  - 플레이어
+  - v 공통
+  - v 이동, 공격, 점프
+  - v 플레이어
   - 상호작용
   - 적
   - AI
@@ -40,7 +40,7 @@
   - 특수 스킬
   - 폭탄
   - 활
-  - 달리기, 구르기, 덤블링 등
+  - v 달리기, 구르기, 덤블링 등
 - 상호작용		1/14
   - 간단한 상점
 
@@ -81,3 +81,18 @@
   - Sun and Sky
   - Gameplay Ability
   - Gameplay Tags
+  
+  
+  
+  
+  
+  ## Crunch
+    - To Do
+	  - 전투1		추적, 공격, 스킬, TakeDamage
+	  - 전투2		Attribute, Effect, Ability, Tag
+	  - 아이템		ItemIdeal, ItemActor, ItemInstance
+	  - 저장		GameState, PlayerState
+	  - 지형변경	Voxel
+	  - UI		체력바, 타이틀, 사망, 엔딩
+	  - 시네마틱	연출추가, 이펙트, 사운드
+	  - 퀘스트		??

@@ -85,6 +85,7 @@ void AWC_Character::PostInitializeComponents()
 	}
 }
 
+
 void AWC_Character::SetRagdoll(bool bEnabled)
 {
 	UCapsuleComponent* cap = GetCapsuleComponent();
@@ -113,6 +114,8 @@ void AWC_Character::SetRagdoll(bool bEnabled)
 		}
 
 		mesh->AddImpulse(mesh->GetRightVector()*mesh->GetMass()*100);
+
+		GetController()->SetIgnoreMoveInput(true);
 	}
 	else
 	{
@@ -128,6 +131,8 @@ void AWC_Character::SetRagdoll(bool bEnabled)
 		mesh->SetCollisionProfileName(TEXT("CharacterMesh"));
 		mesh->AttachToComponent(cap, FAttachmentTransformRules::KeepWorldTransform);
 		mesh->SetRelativeTransform(MeshRelativeTransform);
+
+		GetController()->SetIgnoreMoveInput(false);
 
 		if (spring)
 		{

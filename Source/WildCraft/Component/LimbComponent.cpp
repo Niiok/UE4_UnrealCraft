@@ -67,14 +67,8 @@ void ULimbComponent::BeginPlay()
 
 
 		// physic, collision, overlap
-		NewComponent->SetCollisionProfileName(TEXT("PhysicsActor") );
-		//NewComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		//NewComponent->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-		NewComponent->SetNotifyRigidBodyCollision(true);
-
-
-
-		//NewComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Block);
+		NewComponent->SetCollisionProfileName(TEXT("Limb"));
+		//NewComponent->SetNotifyRigidBodyCollision(true);
 	}	
 	SetLimbCollisionResponse(ELimb::ELIMB_MAX, ECollisionResponse::ECR_Ignore);
 }
@@ -143,11 +137,11 @@ FName ULimbComponent::GetSocketName(ELimb limb)
 	case ELimb::E1:
 		return SocketName_Extra1;
 	case ELimb::E2:
-		return SocketName_Extra1;
+		return SocketName_Extra2;
 	case ELimb::E3:
-		return SocketName_Extra1;
+		return SocketName_Extra3;
 	case ELimb::E4:
-		return SocketName_Extra1;
+		return SocketName_Extra4;
 	default:
 		return FName();
 	}
@@ -168,27 +162,33 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 
 	//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("%s overlap %s : %d"), *OverlappedComponent->GetName(), *OtherActor->GetActorLabel(), SweepResult.ImpactNormal.Size()));
 	int duration = 10;
+	//GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+	//	TEXT("%s"), *SweepResult.ToString()));
+	//GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+	//	TEXT("SweepResult : ")));
+	//GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+	//	TEXT("bFromSweep : %s"), bFromSweep ? TEXT("true") : TEXT("false")));
+	//GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+	//	TEXT("OtherBodyIndex : %d"), OtherBodyIndex));
+	//GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+	//	TEXT("OtherComp : %s"), *OtherComp->GetName()));
+	//GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+	//	TEXT("OtherActor : %s"), *OtherActor->GetName()));
+	//GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
+	//	TEXT("OverlappedComponent : %s"), *OverlappedComponent->GetName()));
+	
 	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
-		TEXT("%s"), *SweepResult.ToString()));
+		TEXT("Component Speed : %f"), OverlappedComponent->GetPhysicsLinearVelocity().Size()));
 	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
-		TEXT("SweepResult : ")));
-	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
-		TEXT("bFromSweep : %s"), bFromSweep ? TEXT("true") : TEXT("false")));
-	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
-		TEXT("OtherBodyIndex : %d"), OtherBodyIndex));
-	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
-		TEXT("OtherComp : %s"), *OtherComp->GetName()));
-	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
-		TEXT("OtherActor : %s"), *OtherActor->GetName()));
-	GEngine->AddOnScreenDebugMessage(-1, duration, FColor::Cyan, FString::Printf(
-		TEXT("OverlappedComponent : %s"), *OverlappedComponent->GetName()));
+		TEXT("Actor Speed : %f"), OverlappedComponent->GetOwner()->GetVelocity().Size()));
+
 
 	if (OtherComp->IsSimulatingPhysics() == true)
 	{
 		//UKismetSystemLibrary::SphereTraceSingle(
 		//	GetWorld(), OverlappedComponent->GetComponentLocation(), OtherComp->GetComponentLocation(), Cast<USphereComponent>(OverlappedComponent)->GetScaledSphereRadius(), ETraceTypeQuery::TraceTypeQuery1, )
 
-		OtherComp->AddImpulseAtLocation(OverlappedComponent->GetOwner()->GetVelocity() * OtherComp->GetMass() * 2, OverlappedComponent->GetComponentLocation());
+		OtherComp->AddImpulseAtLocation(OverlappedComponent->GetPhysicsLinearVelocity() * OtherComp->GetMass(), OverlappedComponent->GetComponentLocation());
 		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("simulating")));
 	}
 
