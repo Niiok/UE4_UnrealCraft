@@ -69,6 +69,7 @@ float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageE
 	UGameplayEffect damage;
 	damage*/
 
+
 	if (CurrentHP != 0)
 		CurrentHP = FMath::Clamp<float>(CurrentHP - DamageAmount, 0, MaxHP);
 
