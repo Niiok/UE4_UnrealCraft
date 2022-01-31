@@ -40,25 +40,13 @@ void AWC_Character::BeginPlay()
 
 	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
 
-	if (GetAbilitySystemComponent() != nullptr)
-		AttributeSet = GetAbilitySystemComponent()->GetSet<class UWC_AttributeSet_Character>();
-
 	/*Widget_HPBar->SetRelativeLocation(
 		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));*/
 }
 
-void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
-{
-	FGameplayAbilitySpec spec(Ability);
-	//spec.InputID = 5;
-	//spec.
-
-	AbilitySystem->GiveAbility(spec);
-}
-
 
 //////////////////////////////////////////////////////////////////////////
-// overrides
+// ue4 methods
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
@@ -86,6 +74,17 @@ void AWC_Character::PostInitializeComponents()
 	}
 }
 
+
+///////////////////
+// original methods
+
+const UWC_AttributeSet_Character* AWC_Character::GetAttributeSet() const
+{
+	if (GetAbilitySystemComponent() != nullptr)
+		return GetAbilitySystemComponent()->GetSet<UWC_AttributeSet_Character>();
+	else
+		return nullptr;
+}
 
 void AWC_Character::SetRagdoll(bool bEnabled)
 {
@@ -143,6 +142,17 @@ void AWC_Character::SetRagdoll(bool bEnabled)
 	}
 }
 
+void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
+{
+	FGameplayAbilitySpec spec(Ability);
+	//spec.InputID = 5;
+	//spec.
+
+	AbilitySystem->GiveAbility(spec);
+}
+
+
+//////////////////////////////////////////
 // IAbilitySystemInterface implementation
 UAbilitySystemComponent * AWC_Character::GetAbilitySystemComponent() const
 {
