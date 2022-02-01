@@ -80,6 +80,56 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void AddAbility(TSubclassOf<UGameplayAbility> Ability);
 
+	/**
+	 * Called when character takes damage, which may have killed them
+	 *
+	 * @param DamageAmount Amount of damage that was done, not clamped based on current health
+	 * @param HitInfo The hit info that generated this damage
+	 * @param DamageTags The gameplay tags of the event that did the damage
+	 * @param InstigatorCharacter The character that initiated this damage
+	 * @param DamageCauser The actual actor that did the damage, might be a weapon or projectile
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnDamaged(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, AWC_Character* InstigatorCharacter, AActor* DamageCauser);
+
+	/**
+	 * Called when health is changed, either from healing or from being damaged
+	 * For damage this is called in addition to OnDamaged/OnKilled
+	 *
+	 * @param DeltaValue Change in health value, positive for heal, negative for cost. If 0 the delta is unknown
+	 * @param EventTags The gameplay tags of the event that changed mana
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
+	/**
+	 * Called when mana is changed, either from healing or from being used as a cost
+	 *
+	 * @param DeltaValue Change in mana value, positive for heal, negative for cost. If 0 the delta is unknown
+	 * @param EventTags The gameplay tags of the event that changed mana
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
+	/**
+	 * Called when movement speed is changed
+	 *
+	 * @param DeltaValue Change in move speed
+	 * @param EventTags The gameplay tags of the event that changed mana
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnMoveSpeedChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
+	// Called from RPGAttributeSet, these call BP events above
+	UFUNCTION()
+	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, AWC_Character* InstigatorCharacter, AActor* DamageCauser);
+	UFUNCTION()
+	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+	UFUNCTION()
+	virtual void HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+	UFUNCTION()
+	virtual void HandleMoveSpeedChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
 
 	// IAbilitySystemInterface을(를) 통해 상속됨
 	virtual UAbilitySystemComponent * GetAbilitySystemComponent() const override;

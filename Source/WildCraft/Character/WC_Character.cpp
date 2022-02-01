@@ -10,6 +10,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -42,6 +43,13 @@ void AWC_Character::BeginPlay()
 
 	/*Widget_HPBar->SetRelativeLocation(
 		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));*/
+
+	const UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
+
+	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
+	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
+
+
 }
 
 
@@ -150,6 +158,43 @@ void AWC_Character::AddAbility(TSubclassOf<UGameplayAbility> Ability)
 
 	AbilitySystem->GiveAbility(spec);
 }
+
+void AWC_Character::HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, AWC_Character* InstigatorPawn, AActor* DamageCauser)
+{
+	OnDamaged(DamageAmount, HitInfo, DamageTags, InstigatorPawn, DamageCauser);
+}
+
+void AWC_Character::HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	// We only call the BP callback if this is not the initial ability setup
+	//if (bAbilitiesInitialized)
+	{
+		OnHealthChanged(DeltaValue, EventTags);
+
+		if (GetAttributeSet()->GetHealth() == 0.0f)
+			SetRagdoll(true);
+	}
+}
+
+void AWC_Character::HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	//if (bAbilitiesInitialized)
+	{
+		OnManaChanged(DeltaValue, EventTags);
+	}
+}
+
+void AWC_Character::HandleMoveSpeedChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags)
+{
+	// Update the character movement's walk speed
+	GetCharacterMovement()->MaxWalkSpeed = GetAttributeSet()->GetMoveSpeed();
+
+	//if (bAbilitiesInitialized)
+	{
+		OnMoveSpeedChanged(DeltaValue, EventTags);
+	}
+}
+
 
 
 //////////////////////////////////////////

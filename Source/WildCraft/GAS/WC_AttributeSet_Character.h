@@ -16,8 +16,10 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-DECLARE_EVENT_FiveParams(UWC_AttributeSet_Character, FWC_AttributeEvent_Damage, float, const FHitResult&, const struct FGameplayTagContainer&, class AWC_Character*, AActor*);
-DECLARE_EVENT_TwoParams(UWC_AttributeSet_Character, FWC_AttributeEvent, float, const struct FGameplayTagContainer&);
+//DECLARE_EVENT_FiveParams(UWC_AttributeSet_Character, FWC_AttributeEvent_Damage, float, const FHitResult&, const struct FGameplayTagContainer&, class AWC_Character*, AActor*);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FWC_AttributeEvent_Damage, float, DamageAmount, const FHitResult&, HitInfo, const struct FGameplayTagContainer&, DamageTags, AWC_Character*, InstigatorCharacter, AActor*, DamageCauser);
+//DECLARE_EVENT_TwoParams(UWC_AttributeSet_Character, FWC_AttributeEvent, float, const struct FGameplayTagContainer&);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWC_AttributeEvent, float, DeltaValue, const struct FGameplayTagContainer&, EventTags);
 
 /**
  * 
