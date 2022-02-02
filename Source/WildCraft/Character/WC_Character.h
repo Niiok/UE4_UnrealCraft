@@ -40,6 +40,7 @@ private:
 		FTransform MeshRelativeTransform;
 		bool bRagdoll = false;
 		//class AAIController* AiController;
+		UGameplayEffect* DamageGE;
 
 public:
 	AWC_Character();

@@ -33,7 +33,13 @@ AWC_Character::AWC_Character()
 		Widget_HPBar->SetWidgetClass(hpbar_class.Class);
 		Widget_HPBar->SetDrawSize(FVector2D(150.0f, 50.0f));
 	}
+
+	DamageGE = NewObject<UGameplayEffect>();
+	DamageGE->DurationPolicy = EGameplayEffectDurationType::Instant;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// ue4 methods
 
 void AWC_Character::BeginPlay()
 {
@@ -49,25 +55,20 @@ void AWC_Character::BeginPlay()
 	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
 	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
 
-
 }
-
-
-//////////////////////////////////////////////////////////////////////////
-// ue4 methods
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
-	UGameplayEffect* effect = NewObject<UGameplayEffect>();
-	effect->DurationPolicy = EGameplayEffectDurationType::Instant;
-	int index = effect->Modifiers.Num();
-	effect->Modifiers.SetNum(index + 1);
-	FGameplayModifierInfo& info = effect->Modifiers[index];
-	info.ModifierOp = EGameplayModOp::Additive;
-	info.Attribute = GetAttributeSet()->GetHealthAttribute();
-	info.ModifierMagnitude = FScalableFloat(-DamageAmount);
+	if (DamageGE->Modifiers.Num() == 0)
+	{
+		DamageGE->Modifiers.Add(FGameplayModifierInfo());
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Added to Modifier"));
+	}
+	DamageGE->Modifiers.Last().ModifierOp = EGameplayModOp::Additive;
+	DamageGE->Modifiers.Last().Attribute = GetAttributeSet()->GetHealthAttribute();
+	DamageGE->Modifiers.Last().ModifierMagnitude = FScalableFloat(-DamageAmount);
 
-	GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(effect, 1.0f, GetAbilitySystemComponent()->MakeEffectContext());
+	GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(DamageGE, 1.0f, GetAbilitySystemComponent()->MakeEffectContext());
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
