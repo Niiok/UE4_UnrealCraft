@@ -5,7 +5,6 @@
 #include "GameFramework/Character.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "GameplayTagContainer.h"
 #include "AbilitySystemBlueprintLibrary.h"
 
 // Sets default values for this component's properties
@@ -20,7 +19,7 @@ ULimbComponent::ULimbComponent()
 	SocketName_Extra3 = FName();
 	SocketName_Extra4 = FName();
 
-	LimbSpheres.Init(NULL, (int)ELimb::ELIMB_MAX);
+	LimbPrimitives.Init(NULL, (int)ELimb::ELIMB_MAX);
 	// ...
 
 	//generate spheres
@@ -37,11 +36,11 @@ void ULimbComponent::BeginPlay()
 		if (GetSocketName((ELimb)i) == TEXT(""))
 			continue;
 
-		//LimbSpheres[i] = Cast<UPrimitiveComponent>(CreateDefaultSubobject<USphereComponent>(GetSocketName((ELimb)i)));
+		//LimbPrimitives[i] = Cast<UPrimitiveComponent>(CreateDefaultSubobject<USphereComponent>(GetSocketName((ELimb)i)));
 
 		USphereComponent* NewComponent = NewObject<USphereComponent>(GetOwner(), GetSocketName((ELimb)i));
 		check(NewComponent);
-		LimbSpheres[i] = NewComponent;
+		LimbPrimitives[i] = NewComponent;
 
 		NewComponent->OnComponentCreated();
 		NewComponent->RegisterComponent();
@@ -86,18 +85,18 @@ void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse res
 	default:
 		if (GetSocketName(limb) == FName())
 			return;
-		LimbSpheres[(int)limb]->SetCollisionResponseToAllChannels(response);
+		LimbPrimitives[(int)limb]->SetCollisionResponseToAllChannels(response);
 		switch (response)
 		{
 		case ECR_Ignore:
-			LimbSpheres[(int)limb]->SetHiddenInGame(true);
-			LimbSpheres[(int)limb]->SetVisibility(false);
+			LimbPrimitives[(int)limb]->SetHiddenInGame(true);
+			LimbPrimitives[(int)limb]->SetVisibility(false);
 			break;
 		case ECR_Overlap:
 		case ECR_Block:
 			HitRecord.Empty();
-			LimbSpheres[(int)limb]->SetHiddenInGame(false);
-			LimbSpheres[(int)limb]->SetVisibility(true);
+			LimbPrimitives[(int)limb]->SetHiddenInGame(false);
+			LimbPrimitives[(int)limb]->SetVisibility(true);
 			break;
 		case ECR_MAX:
 			break;
@@ -108,7 +107,7 @@ void ULimbComponent::SetLimbCollisionResponse(ELimb limb, ECollisionResponse res
 	}
 }
 
-ECollisionResponse ULimbComponent::GetLimbCollisionResponse(ELimb limb)
+ECollisionResponse ULimbComponent::GetLimbCollisionResponse(ELimb limb) const
 {
 	switch (limb)
 	{
@@ -119,11 +118,11 @@ ECollisionResponse ULimbComponent::GetLimbCollisionResponse(ELimb limb)
 		if (GetSocketName(limb) == FName())
 			return ECollisionResponse::ECR_MAX;
 		else
-			return LimbSpheres[(int)limb]->GetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn);
+			return LimbPrimitives[(int)limb]->GetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn);
 	}
 }
 
-FName ULimbComponent::GetSocketName(ELimb limb)
+FName ULimbComponent::GetSocketName(ELimb limb) const
 {
 	switch (limb)
 	{
@@ -148,11 +147,58 @@ FName ULimbComponent::GetSocketName(ELimb limb)
 	}
 }
 
+FGameplayTag ULimbComponent::GetGameplayTag(ELimb limb) const
+{
+	switch (limb)
+	{
+	case ELimb::LH:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.LeftHand"));
+	case ELimb::RH:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.RightHand"));
+	case ELimb::LF:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.LeftFoot"));
+	case ELimb::RF:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.RightFoot"));
+		// E1 ~ E4 will be added soon
+	default:
+		return FGameplayTag();
+	}
+}
+
+ELimb ULimbComponent::FindLimb(UPrimitiveComponent * component) const
+{
+	int index = LimbPrimitives.Find(component);
+
+	switch (index)
+	{
+	case (int)ELimb::LH:
+		return ELimb::LH;
+	case (int)ELimb::RH:
+		return ELimb::RH;
+	case (int)ELimb::LF:
+		return ELimb::LF;
+	case (int)ELimb::RF:
+		return ELimb::RF;
+
+	case (int)ELimb::E1:
+		return ELimb::E1;
+	case (int)ELimb::E2:
+		return ELimb::E2;
+	case (int)ELimb::E3:
+		return ELimb::E3;
+	case (int)ELimb::E4:
+		return ELimb::E4;
+
+	default:
+		return ELimb::ELIMB_MAX;
+	}
+}
+
 void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	if (OtherActor == GetOwner())
 		return;
-	if (LimbSpheres.Contains(OtherComp))
+	if (LimbPrimitives.Contains(OtherComp))
 		return;
 	if (HitRecord.Contains(OtherActor))
 		return;
@@ -164,8 +210,11 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 	gameplay_event.Instigator = GetOwner();
 	gameplay_event.OptionalObject = Cast<APawn>(GetOwner())->GetController();
 	gameplay_event.EventMagnitude = OverlappedComponent->GetPhysicsLinearVelocity().Size();
+	//gameplay_event.ContextHandle.AddHitResult(SweepResult);
 
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), FGameplayTag::RequestGameplayTag(TEXT("How.Kick")), gameplay_event);
+	FGameplayTag tag = GetGameplayTag(FindLimb(OverlappedComponent));
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), tag, gameplay_event);
 
 	if (OtherComp->IsSimulatingPhysics() == true)
 	{
@@ -181,7 +230,7 @@ void ULimbComponent::OnLimbHitFunc(UPrimitiveComponent * HitComponent, AActor * 
 {	
 	if (OtherActor == GetOwner())
 		return;
-	if (LimbSpheres.Contains(OtherComp))
+	if (LimbPrimitives.Contains(OtherComp))
 		return;
 	if (HitRecord.Contains(OtherActor))
 		return;

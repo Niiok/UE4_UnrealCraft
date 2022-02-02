@@ -58,16 +58,16 @@ void AWC_Character::BeginPlay()
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
-	//FGameplayEffectSpec()
-	//GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf()
+	UGameplayEffect* effect = NewObject<UGameplayEffect>();
+	effect->DurationPolicy = EGameplayEffectDurationType::Instant;
+	int index = effect->Modifiers.Num();
+	effect->Modifiers.SetNum(index + 1);
+	FGameplayModifierInfo& info = effect->Modifiers[index];
+	info.ModifierOp = EGameplayModOp::Additive;
+	info.Attribute = GetAttributeSet()->GetHealthAttribute();
+	info.ModifierMagnitude = FScalableFloat(-DamageAmount);
 
-	/*
-	UGameplayEffect damage;
-	damage*/
-
-
-	if (CurrentHP != 0)
-		CurrentHP = FMath::Clamp<float>(CurrentHP - DamageAmount, 0, MaxHP);
+	GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(effect, 1.0f, GetAbilitySystemComponent()->MakeEffectContext());
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }

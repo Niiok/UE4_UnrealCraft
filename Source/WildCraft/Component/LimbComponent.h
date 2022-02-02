@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "GameplayTagContainer.h"
 #include "LimbComponent.generated.h"
 
 
@@ -53,7 +54,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Limb", meta = (AllowPrivateAccess = true))
 		float DefaultRadius = 10;
 
-	TArray<UPrimitiveComponent*> LimbSpheres;
+	TArray<UPrimitiveComponent*> LimbPrimitives;
 	TSet<AActor*> HitRecord;
 
 public:	
@@ -71,10 +72,12 @@ public:
 		void SetLimbCollisionResponse(ELimb limb, ECollisionResponse response);
 
 	UFUNCTION(BlueprintCallable)
-		ECollisionResponse GetLimbCollisionResponse(ELimb limb);
+		ECollisionResponse GetLimbCollisionResponse(ELimb limb) const;
 
 private:
-	FName GetSocketName(ELimb limb);
+	FName GetSocketName(ELimb limb) const;
+	FGameplayTag GetGameplayTag(ELimb limb) const;
+	ELimb FindLimb(UPrimitiveComponent* component) const;
 
 private:
 	UFUNCTION()
