@@ -44,9 +44,9 @@ void ULimbComponent::BeginPlay()
 
 		NewComponent->OnComponentCreated();
 		NewComponent->RegisterComponent();
-		NewComponent->SetupAttachment(GetOwner()->GetRootComponent());
 		if (NewComponent->bWantsInitializeComponent)
 			NewComponent->InitializeComponent();
+		//NewComponent->SetupAttachment(Cast<ACharacter>(GetOwner())->GetMesh(), GetSocketName((ELimb)i));
 
 		UE_LOG(LogTemp, Display, TEXT("Generated %s"), *GetSocketName((ELimb)i).ToString());
 
@@ -159,7 +159,15 @@ FGameplayTag ULimbComponent::GetGameplayTag(ELimb limb) const
 		return FGameplayTag::RequestGameplayTag(TEXT("What.LeftFoot"));
 	case ELimb::RF:
 		return FGameplayTag::RequestGameplayTag(TEXT("What.RightFoot"));
-		// E1 ~ E4 will be added soon
+
+	case ELimb::E1:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.ExtraLimb1"));
+	case ELimb::E2:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.ExtraLimb2"));
+	case ELimb::E3:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.ExtraLimb3"));
+	case ELimb::E4:
+		return FGameplayTag::RequestGameplayTag(TEXT("What.ExtraLimb4"));
 	default:
 		return FGameplayTag();
 	}

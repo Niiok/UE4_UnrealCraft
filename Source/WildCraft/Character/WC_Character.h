@@ -29,10 +29,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
 		class ULimbComponent* Limb;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Ability"/*",meta=(AllowPrivateAccess=true))*/)
-		float MaxHP = 100.0f;
-		float CurrentHP;
-
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "UI"/*",meta=(AllowPrivateAccess=true))*/)
 		class UWidgetComponent* Widget_HPBar;
 
@@ -40,7 +36,7 @@ private:
 		FTransform MeshRelativeTransform;
 		bool bRagdoll = false;
 		//class AAIController* AiController;
-		UGameplayEffect* DamageGE;
+		//UGameplayEffect* DamageGE;
 
 public:
 	AWC_Character();
@@ -69,7 +65,7 @@ public:
 	// original methods
 public:
 	UFUNCTION(BlueprintCallable)
-		const UWC_AttributeSet_Character* GetAttributeSet() const;
+		const UWC_AttributeSet_Character * GetAttributeSet() const;
 
 	UFUNCTION(BlueprintCallable)
 		void SetRagdoll(bool bEnabled);

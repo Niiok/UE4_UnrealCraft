@@ -11,6 +11,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AIController.h"
+#include "BrainComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -19,7 +21,6 @@ AWC_Character::AWC_Character()
 {
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	Limb = CreateDefaultSubobject<ULimbComponent>(TEXT("Limb"));
-	CurrentHP = MaxHP;
 	Widget_HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBar"));
 
 	Widget_HPBar->SetupAttachment(GetMesh());
@@ -34,8 +35,6 @@ AWC_Character::AWC_Character()
 		Widget_HPBar->SetDrawSize(FVector2D(150.0f, 50.0f));
 	}
 
-	DamageGE = NewObject<UGameplayEffect>();
-	DamageGE->DurationPolicy = EGameplayEffectDurationType::Instant;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -54,16 +53,17 @@ void AWC_Character::BeginPlay()
 
 	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
 	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
-
 }
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
-	if (DamageGE->Modifiers.Num() == 0)
-	{
-		DamageGE->Modifiers.Add(FGameplayModifierInfo());
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Added to Modifier"));
-	}
+	UGameplayEffect* DamageGE = NewObject<UGameplayEffect>();
+	DamageGE->DurationPolicy = EGameplayEffectDurationType::Instant;
+	//if (DamageGE->Modifiers.Num() == 0)
+	//{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Added to Modifier"));
+	//}
+	DamageGE->Modifiers.Add(FGameplayModifierInfo());
 	DamageGE->Modifiers.Last().ModifierOp = EGameplayModOp::Additive;
 	DamageGE->Modifiers.Last().Attribute = GetAttributeSet()->GetHealthAttribute();
 	DamageGE->Modifiers.Last().ModifierMagnitude = FScalableFloat(-DamageAmount);
@@ -97,11 +97,15 @@ const UWC_AttributeSet_Character* AWC_Character::GetAttributeSet() const
 
 void AWC_Character::SetRagdoll(bool bEnabled)
 {
+	if (bEnabled == bRagdoll)
+		return;
+	else
+		bRagdoll = bEnabled;
+
 	UCapsuleComponent* cap = GetCapsuleComponent();
 	USkeletalMeshComponent* mesh = GetMesh();
 	USpringArmComponent* spring = Cast<USpringArmComponent>(GetComponentByClass(USpringArmComponent::StaticClass()));
 
-	bRagdoll = bEnabled;
 
 	if (bRagdoll)
 	{
@@ -173,7 +177,33 @@ void AWC_Character::HandleHealthChanged(float DeltaValue, const struct FGameplay
 		OnHealthChanged(DeltaValue, EventTags);
 
 		if (GetAttributeSet()->GetHealth() == 0.0f)
+		{
 			SetRagdoll(true);
+			if (GetLifeSpan() == 0.0f)
+				SetLifeSpan(10.0f);
+
+			if (!IsBotControlled())
+			{
+				UBrainComponent* brain = Cast<AAIController>(GetController())->GetBrainComponent();
+				if (brain)
+					brain->StopLogic(FString());
+			}
+		}
+		else
+		{
+			SetRagdoll(false);
+			if (GetLifeSpan() != 0.0f)
+			{
+				SetLifeSpan(0.0f);
+
+				if (!IsBotControlled())
+				{
+					UBrainComponent* brain = Cast<AAIController>(GetController())->GetBrainComponent();
+					if (brain)
+						brain->RestartLogic();
+				}
+			}
+		}
 	}
 }
 
