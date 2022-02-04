@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AIController.h"
 #include "BrainComponent.h"
+#include "VoxelComponents/VoxelNoClippingComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -35,6 +36,11 @@ AWC_Character::AWC_Character()
 		Widget_HPBar->SetDrawSize(FVector2D(150.0f, 50.0f));
 	}
 
+	NoClipping = CreateDefaultSubobject<UVoxelNoClippingComponent>(TEXT("NoClipping"));
+
+	UCharacterMovementComponent* move_comp = Cast<UCharacterMovementComponent>(GetMovementComponent());
+	if (move_comp)
+		move_comp->MaxStepHeight = 75.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -57,18 +63,33 @@ void AWC_Character::BeginPlay()
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
+	FHitResult* hit = NULL;
+
+	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
+	{
+		FPointDamageEvent* point_event = (FPointDamageEvent*)&DamageEvent;
+
+		hit = &point_event->HitInfo;
+	}/*
+	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
+	{
+		FRadialDamageEvent* rad_event = (FRadialDamageEvent*)&DamageEvent;
+
+		rad_event->
+	}*/
+
 	UGameplayEffect* DamageGE = NewObject<UGameplayEffect>();
 	DamageGE->DurationPolicy = EGameplayEffectDurationType::Instant;
-	//if (DamageGE->Modifiers.Num() == 0)
-	//{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Added to Modifier"));
-	//}
 	DamageGE->Modifiers.Add(FGameplayModifierInfo());
 	DamageGE->Modifiers.Last().ModifierOp = EGameplayModOp::Additive;
 	DamageGE->Modifiers.Last().Attribute = GetAttributeSet()->GetHealthAttribute();
 	DamageGE->Modifiers.Last().ModifierMagnitude = FScalableFloat(-DamageAmount);
+	DamageGE->GameplayCues.Add(FGameplayEffectCue(FGameplayTag::RequestGameplayTag(TEXT("When.Hit")), 1, 1));
 
-	GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(DamageGE, 1.0f, GetAbilitySystemComponent()->MakeEffectContext());
+	FGameplayEffectContextHandle context = GetAbilitySystemComponent()->MakeEffectContext();
+	if (hit)
+		context.AddHitResult(*hit);
+	GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(DamageGE, 1.0f, context);
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }

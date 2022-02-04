@@ -211,12 +211,14 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 	else
 		HitRecord.Add(OtherActor);
 
+	//FHitResult hit = SweepResult;
+
 	FGameplayEventData gameplay_event;
 	gameplay_event.Target = OtherActor;
 	gameplay_event.Instigator = GetOwner();
 	gameplay_event.OptionalObject = Cast<APawn>(GetOwner())->GetController();
 	gameplay_event.EventMagnitude = OverlappedComponent->GetPhysicsLinearVelocity().Size();
-	//gameplay_event.ContextHandle.AddHitResult(SweepResult);
+	//gameplay_event.ContextHandle.AddHitResult(hit);
 
 	FGameplayTag tag = GetGameplayTag(FindLimb(OverlappedComponent));
 

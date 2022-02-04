@@ -32,6 +32,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "UI"/*",meta=(AllowPrivateAccess=true))*/)
 		class UWidgetComponent* Widget_HPBar;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Voxel"/*",meta=(AllowPrivateAccess=true))*/)
+		class UVoxelNoClippingComponent* NoClipping;
+
 private:
 		FTransform MeshRelativeTransform;
 		bool bRagdoll = false;
