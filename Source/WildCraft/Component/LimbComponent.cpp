@@ -63,11 +63,9 @@ void ULimbComponent::BeginPlay()
 		);
 
 		NewComponent->OnComponentBeginOverlap.AddDynamic(this, &ULimbComponent::OnLimbBeginOverlapFunc);
-		NewComponent->OnComponentHit.AddDynamic(this, &ULimbComponent::OnLimbHitFunc);
-
 
 		// physic, collision, overlap
-		NewComponent->SetCollisionProfileName(TEXT("Limb"));
+		NewComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		//NewComponent->SetNotifyRigidBodyCollision(true);
 	}	
 	SetLimbCollisionResponse(ELimb::ELIMB_MAX, ECollisionResponse::ECR_Ignore);
@@ -232,20 +230,4 @@ void ULimbComponent::OnLimbBeginOverlapFunc(UPrimitiveComponent * OverlappedComp
 		OtherComp->AddImpulseAtLocation(OverlappedComponent->GetPhysicsLinearVelocity() * OtherComp->GetMass(), OverlappedComponent->GetComponentLocation());
 		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("simulating")));
 	}
-}
-
-void ULimbComponent::OnLimbHitFunc(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
-{	
-	if (OtherActor == GetOwner())
-		return;
-	if (LimbPrimitives.Contains(OtherComp))
-		return;
-	if (HitRecord.Contains(OtherActor))
-		return;
-	else
-		HitRecord.Add(OtherActor);
-
-
-
-	GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, FString::Printf(TEXT("%s hit %s"), *HitComponent->GetName(), *OtherActor->GetActorLabel()));
 }

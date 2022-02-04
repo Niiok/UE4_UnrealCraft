@@ -89,12 +89,4 @@ private:
 			bool bFromSweep, 
 			const FHitResult & SweepResult
 		);
-	UFUNCTION()
-		void OnLimbHitFunc(
-			UPrimitiveComponent* HitComponent,
-			AActor* OtherActor,
-			UPrimitiveComponent* OtherComp,
-			FVector NormalImpulse,
-			const FHitResult& Hit
-		);
 };

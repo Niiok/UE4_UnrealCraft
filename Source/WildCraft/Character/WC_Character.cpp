@@ -182,9 +182,10 @@ void AWC_Character::HandleHealthChanged(float DeltaValue, const struct FGameplay
 			if (GetLifeSpan() == 0.0f)
 				SetLifeSpan(10.0f);
 
-			if (!IsBotControlled())
+			AAIController* ai = Cast<AAIController>(GetController());
+			if (ai)
 			{
-				UBrainComponent* brain = Cast<AAIController>(GetController())->GetBrainComponent();
+				UBrainComponent* brain = ai->GetBrainComponent();
 				if (brain)
 					brain->StopLogic(FString());
 			}
@@ -196,9 +197,10 @@ void AWC_Character::HandleHealthChanged(float DeltaValue, const struct FGameplay
 			{
 				SetLifeSpan(0.0f);
 
-				if (!IsBotControlled())
+				AAIController* ai = Cast<AAIController>(GetController());
+				if (ai)
 				{
-					UBrainComponent* brain = Cast<AAIController>(GetController())->GetBrainComponent();
+					UBrainComponent* brain = ai->GetBrainComponent();
 					if (brain)
 						brain->RestartLogic();
 				}
