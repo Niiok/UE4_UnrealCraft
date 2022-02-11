@@ -11,6 +11,9 @@
 
 class UWC_AttributeSet_Character;
 
+/*
+Every combatable Characters in this game inherited by this class.
+*/
 UCLASS()
 class WILDCRAFT_API AWC_Character : public AVoxelCharacter
 	, public IAbilitySystemInterface, public IGameplayTagAssetInterface

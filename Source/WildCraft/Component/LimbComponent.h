@@ -9,6 +9,11 @@
 
 
 /*
+Enum used in LimbComponent.
+L : Left
+R : Right
+H : Hand
+F : Foot
  */
 UENUM(BlueprintType)
 enum class ELimb : uint8
@@ -27,6 +32,8 @@ enum class ELimb : uint8
 //DECLARE_EVENT_ThreeParams(ULimbComponent, FLimbOverlapSignature, AActor*, ATriggerBase*, AWC_Player*);
 
 /*
+Generate GameplayEvent with corresponding GameplayTag when limb overlap something.
+Using in multiplayer game is not recommended. (coupling of game logic with animation)
  */
 UCLASS(ClassGroup = "Custom", meta = (BlueprintSpawnableComponent))
 class WILDCRAFT_API ULimbComponent : public UActorComponent
