@@ -13,7 +13,8 @@
 				"Voxel",
 				"GameplayAbilities",
 				"GameplayTasks",
-				"CoreUObject"
+				"CoreUObject",
+				"UMG"
 			]
 		}
 	],

@@ -71,7 +71,7 @@ public:
 	// original methods
 public:
 	UFUNCTION(BlueprintCallable)
-		const UWC_AttributeSet_Character * GetAttributeSet() const;
+		UWC_AttributeSet_Character * GetAttributeSet() const;
 
 	UFUNCTION(BlueprintCallable)
 		void SetRagdoll(bool bEnabled);

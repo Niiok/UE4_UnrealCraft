@@ -78,6 +78,8 @@ float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageE
 		rad_event->
 	}*/
 
+	DamageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
 	UGameplayEffect* DamageGE = NewObject<UGameplayEffect>();
 	DamageGE->DurationPolicy = EGameplayEffectDurationType::Instant;
 	DamageGE->Modifiers.Add(FGameplayModifierInfo());
@@ -91,7 +93,7 @@ float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageE
 		context.AddHitResult(*hit);
 	GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(DamageGE, 1.0f, context);
 
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	return DamageAmount;
 }
 
 void AWC_Character::PostInitializeComponents()
@@ -108,10 +110,10 @@ void AWC_Character::PostInitializeComponents()
 ///////////////////
 // original methods
 
-const UWC_AttributeSet_Character* AWC_Character::GetAttributeSet() const
+UWC_AttributeSet_Character* AWC_Character::GetAttributeSet() const
 {
 	if (GetAbilitySystemComponent() != nullptr)
-		return GetAbilitySystemComponent()->GetSet<UWC_AttributeSet_Character>();
+		return *(UWC_AttributeSet_Character**)GetAbilitySystemComponent()->GetSet<UWC_AttributeSet_Character>();
 	else
 		return nullptr;
 }
