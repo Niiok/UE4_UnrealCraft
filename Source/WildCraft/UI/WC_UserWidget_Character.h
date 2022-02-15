@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "GameplayTagContainer.h"
 #include "WC_UserWidget_Character.generated.h"
 
 /**
@@ -13,7 +14,24 @@ UCLASS()
 class WILDCRAFT_API UWC_UserWidget_Character : public UUserWidget
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool bUpdateOnHealthChange = false;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool bUpdateOnManaChange = false;
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool bUpdateOnMoveSpeedChange = false;
 
+	UPROPERTY(BlueprintReadOnly)
+		class UWC_AttributeSet_Character* AttributeSet;
 
+public:
+	UFUNCTION(BlueprintCallable)
+		void BindAttributeSet(class UWC_AttributeSet_Character* attribute);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void Update(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 };

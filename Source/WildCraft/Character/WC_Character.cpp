@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AIController.h"
 #include "BrainComponent.h"
+#include "UI/WC_UserWidget_Character.h"
 #include "VoxelComponents/VoxelNoClippingComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -55,10 +56,12 @@ void AWC_Character::BeginPlay()
 	/*Widget_HPBar->SetRelativeLocation(
 		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));*/
 
-	const UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
+	UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
 
-	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
-	((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
+	AttributeSet->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
+	((UWC_UserWidget_Character*)Widget_HPBar->GetUserWidgetObject())->BindAttributeSet(AttributeSet);
+
+	AttributeSet->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
 }
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
