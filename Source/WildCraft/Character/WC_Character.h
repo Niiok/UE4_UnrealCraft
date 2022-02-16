@@ -11,6 +11,11 @@
 
 class UWC_AttributeSet_Character;
 
+DECLARE_EVENT_FiveParams(AWC_Character, FWC_AttributeEvent_Damage, float, const FHitResult&, const struct FGameplayTagContainer&, class AWC_Character*, AActor*);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FWC_AttributeEvent_Damage, float, DamageAmount, const FHitResult&, HitInfo, const struct FGameplayTagContainer&, DamageTags, AWC_Character*, InstigatorCharacter, AActor*, DamageCauser);
+DECLARE_EVENT_TwoParams(AWC_Character, FWC_AttributeEvent, float, const struct FGameplayTagContainer&);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWC_AttributeEvent, float, DeltaValue, const struct FGameplayTagContainer&, EventTags);
+
 /*
 Every combatable Characters in this game inherited by this class.
 */
@@ -123,15 +128,17 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnMoveSpeedChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
 
+public:
 	// Called from RPGAttributeSet, these call BP events above
-	UFUNCTION()
 	virtual void HandleDamage(float DamageAmount, const FHitResult& HitInfo, const struct FGameplayTagContainer& DamageTags, AWC_Character* InstigatorCharacter, AActor* DamageCauser);
-	UFUNCTION()
 	virtual void HandleHealthChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
-	UFUNCTION()
 	virtual void HandleManaChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
-	UFUNCTION()
 	virtual void HandleMoveSpeedChanged(float DeltaValue, const struct FGameplayTagContainer& EventTags);
+
+	FWC_AttributeEvent_Damage OnDamageDelegate;
+	FWC_AttributeEvent OnHealthChangeDelegate;
+	FWC_AttributeEvent OnManaChangeDelegate;
+	FWC_AttributeEvent OnMoveSpeedChangeDelegate;
 
 
 	// IAbilitySystemInterface을(를) 통해 상속됨

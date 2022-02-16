@@ -165,12 +165,12 @@ void UWC_AttributeSet_Character::PostGameplayEffectExecute(const FGameplayEffect
 			if (TargetCharacter)
 			{
 				// This is proper damage
-				//TargetCharacter->HandleDamage(LocalDamageDone, HitResult, SourceTags, SourceCharacter, SourceActor);
-				OnDamaged.Broadcast(LocalDamageDone, HitResult, SourceTags, SourceCharacter, SourceActor);
+				TargetCharacter->HandleDamage(LocalDamageDone, HitResult, SourceTags, SourceCharacter, SourceActor);
+				//OnDamaged.Broadcast(LocalDamageDone, HitResult, SourceTags, SourceCharacter, SourceActor);
 
 				// Call for all health changes
-				//TargetCharacter->HandleHealthChanged(-LocalDamageDone, SourceTags);
-				OnHealthChanged.Broadcast(-LocalDamageDone, SourceTags);
+				TargetCharacter->HandleHealthChanged(-LocalDamageDone, SourceTags);
+				//OnHealthChanged.Broadcast(-LocalDamageDone, SourceTags);
 			}
 		}
 	}
@@ -183,8 +183,8 @@ void UWC_AttributeSet_Character::PostGameplayEffectExecute(const FGameplayEffect
 		if (TargetCharacter)
 		{
 			// Call for all health changes
-			//TargetCharacter->HandleHealthChanged(DeltaValue, SourceTags);
-			OnHealthChanged.Broadcast(DeltaValue, SourceTags);
+			TargetCharacter->HandleHealthChanged(DeltaValue, SourceTags);
+			//OnHealthChanged.Broadcast(DeltaValue, SourceTags);
 		}
 	}
 	else if (Data.EvaluatedData.Attribute == GetManaAttribute())
@@ -195,8 +195,8 @@ void UWC_AttributeSet_Character::PostGameplayEffectExecute(const FGameplayEffect
 		if (TargetCharacter)
 		{
 			// Call for all mana changes
-			//TargetCharacter->HandleManaChanged(DeltaValue, SourceTags);
-			OnManaChanged.Broadcast(DeltaValue, SourceTags);
+			TargetCharacter->HandleManaChanged(DeltaValue, SourceTags);
+			//OnManaChanged.Broadcast(DeltaValue, SourceTags);
 		}
 	}
 	else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute())
@@ -204,8 +204,8 @@ void UWC_AttributeSet_Character::PostGameplayEffectExecute(const FGameplayEffect
 		if (TargetCharacter)
 		{
 			// Call for all movespeed changes
-			//TargetCharacter->HandleMoveSpeedChanged(DeltaValue, SourceTags);
-			OnMoveSpeedChanged.Broadcast(DeltaValue, SourceTags);
+			TargetCharacter->HandleMoveSpeedChanged(DeltaValue, SourceTags);
+			//OnMoveSpeedChanged.Broadcast(DeltaValue, SourceTags);
 		}
 	}
 }

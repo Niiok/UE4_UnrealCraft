@@ -23,10 +23,9 @@ AWC_Character::AWC_Character()
 {
 	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	Limb = CreateDefaultSubobject<ULimbComponent>(TEXT("Limb"));
+
 	Widget_HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBar"));
-
 	Widget_HPBar->SetupAttachment(GetMesh());
-
 	Widget_HPBar->SetRelativeLocation(
 		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));
 	Widget_HPBar->SetWidgetSpace(EWidgetSpace::Screen);
@@ -56,12 +55,15 @@ void AWC_Character::BeginPlay()
 	/*Widget_HPBar->SetRelativeLocation(
 		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));*/
 
-	UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
+	//UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
 
-	AttributeSet->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
-	((UWC_UserWidget_Character*)Widget_HPBar->GetUserWidgetObject())->BindAttributeSet(AttributeSet);
+	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
 
-	AttributeSet->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
+	/*auto widget = Cast<UWC_UserWidget_Character>(Widget_HPBar->GetUserWidgetObject());
+	if (widget)
+		widget->BindAttributeSet(AttributeSet);*/
+	
+	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
 }
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)

@@ -17,9 +17,9 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 //DECLARE_EVENT_FiveParams(UWC_AttributeSet_Character, FWC_AttributeEvent_Damage, float, const FHitResult&, const struct FGameplayTagContainer&, class AWC_Character*, AActor*);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FWC_AttributeEvent_Damage, float, DamageAmount, const FHitResult&, HitInfo, const struct FGameplayTagContainer&, DamageTags, AWC_Character*, InstigatorCharacter, AActor*, DamageCauser);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FWC_AttributeEvent_Damage, float, DamageAmount, const FHitResult&, HitInfo, const struct FGameplayTagContainer&, DamageTags, AWC_Character*, InstigatorCharacter, AActor*, DamageCauser);
 //DECLARE_EVENT_TwoParams(UWC_AttributeSet_Character, FWC_AttributeEvent, float, const struct FGameplayTagContainer&);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWC_AttributeEvent, float, DeltaValue, const struct FGameplayTagContainer&, EventTags);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWC_AttributeEvent, float, DeltaValue, const struct FGameplayTagContainer&, EventTags);
 
 /**
  * 
@@ -36,7 +36,7 @@ public:
 	/** Current Health, when 0 we expect owner to die. Capped by MaxHealth */
 		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Attribute", ReplicatedUsing = "OnRep_Health")
 		FGameplayAttributeData Health;
-	FWC_AttributeEvent OnHealthChanged;
+	//FWC_AttributeEvent OnHealthChanged;
 	ATTRIBUTE_ACCESSORS(UWC_AttributeSet_Character, Health)
 	
 	/** MaxHealth is its own attribute, since GameplayEffects may modify it */
@@ -47,7 +47,7 @@ public:
 	/** Current Mana, used to execute special abilities. Capped by MaxMana */
 		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Attribute", ReplicatedUsing = "OnRep_Mana")
 		FGameplayAttributeData Mana;
-	FWC_AttributeEvent OnManaChanged;
+	//FWC_AttributeEvent OnManaChanged;
 	ATTRIBUTE_ACCESSORS(UWC_AttributeSet_Character, Mana)
 
 	/** MaxMana is its own attribute, since GameplayEffects may modify it */
@@ -68,13 +68,13 @@ public:
 	/** MoveSpeed affects how fast characters can move */
 		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Attribute", ReplicatedUsing = "OnRep_MoveSpeed")
 		FGameplayAttributeData MoveSpeed;
-	FWC_AttributeEvent OnMoveSpeedChanged;
+	//FWC_AttributeEvent OnMoveSpeedChanged;
 	ATTRIBUTE_ACCESSORS(UWC_AttributeSet_Character, MoveSpeed)
 
 	/** Damage is a 'temporary' attribute used by the DamageExecution to calculate final damage, which then turns into -Health */
 		UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Attribute")
 		FGameplayAttributeData Damage;
-	FWC_AttributeEvent_Damage OnDamaged;
+	//FWC_AttributeEvent_Damage OnDamaged;
 	ATTRIBUTE_ACCESSORS(UWC_AttributeSet_Character, Damage)
 
 protected:

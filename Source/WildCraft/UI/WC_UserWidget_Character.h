@@ -30,7 +30,7 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void BindAttributeSet(class UWC_AttributeSet_Character* attribute);
+		void BindCharacter(class AWC_Character* attribute);
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void Update(float DeltaValue, const struct FGameplayTagContainer& EventTags);
