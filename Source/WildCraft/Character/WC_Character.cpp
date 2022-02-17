@@ -59,10 +59,11 @@ void AWC_Character::BeginPlay()
 
 	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
 
-	/*auto widget = Cast<UWC_UserWidget_Character>(Widget_HPBar->GetUserWidgetObject());
+	auto widget = Cast<UWC_UserWidget_Character>(Widget_HPBar->GetUserWidgetObject());
 	if (widget)
-		widget->BindAttributeSet(AttributeSet);*/
+		widget->BindCharacter(this);
 	
+	OnHealthChangeDelegate.Broadcast(0, FGameplayTagContainer());
 	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
 }
 
@@ -115,10 +116,10 @@ void AWC_Character::PostInitializeComponents()
 ///////////////////
 // original methods
 
-UWC_AttributeSet_Character* AWC_Character::GetAttributeSet() const
+const UWC_AttributeSet_Character* AWC_Character::GetAttributeSet() const
 {
 	if (GetAbilitySystemComponent() != nullptr)
-		return *(UWC_AttributeSet_Character**)GetAbilitySystemComponent()->GetSet<UWC_AttributeSet_Character>();
+		return GetAbilitySystemComponent()->GetSet<UWC_AttributeSet_Character>();
 	else
 		return nullptr;
 }
@@ -203,6 +204,9 @@ void AWC_Character::HandleHealthChanged(float DeltaValue, const struct FGameplay
 	//if (bAbilitiesInitialized)
 	{
 		OnHealthChanged(DeltaValue, EventTags);
+		OnHealthChangeDelegate.Broadcast(DeltaValue, EventTags);
+
+		UE_LOG(LogTemp, Warning, TEXT("%f health left!"), GetAttributeSet()->GetHealth());
 
 		if (GetAttributeSet()->GetHealth() == 0.0f)
 		{
@@ -242,6 +246,7 @@ void AWC_Character::HandleManaChanged(float DeltaValue, const struct FGameplayTa
 	//if (bAbilitiesInitialized)
 	{
 		OnManaChanged(DeltaValue, EventTags);
+		OnManaChangeDelegate.Broadcast(DeltaValue, EventTags);
 	}
 }
 
@@ -253,6 +258,7 @@ void AWC_Character::HandleMoveSpeedChanged(float DeltaValue, const struct FGamep
 	//if (bAbilitiesInitialized)
 	{
 		OnMoveSpeedChanged(DeltaValue, EventTags);
+		OnMoveSpeedChangeDelegate.Broadcast(DeltaValue, EventTags);
 	}
 }
 

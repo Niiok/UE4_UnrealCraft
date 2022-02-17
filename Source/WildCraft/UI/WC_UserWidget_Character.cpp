@@ -5,20 +5,20 @@
 #include "Character/WC_Character.h"
 #include "GAS/WC_AttributeSet_Character.h"
 
-void UWC_UserWidget_Character::BindCharacter(AWC_Character * attribute)
+void UWC_UserWidget_Character::BindCharacter(AWC_Character * character)
 {
-	if (attribute == nullptr)
+	if (character == nullptr)
 		return;
 
-	AttributeSet = attribute->GetAttributeSet();
+	AttributeSet = character->GetAttributeSet();
 
-	//if (bUpdateOnHealthChange)
-	//	attribute->OnHealthChanged.AddDynamic(this, &UWC_UserWidget_Character::Update);
+	if (bUpdateOnHealthChange)
+		character->OnHealthChangeDelegate.AddUObject(this, &UWC_UserWidget_Character::Update);
 
-	//if (bUpdateOnManaChange)
-	//	attribute->OnManaChanged.AddDynamic(this, &UWC_UserWidget_Character::Update);
-	//	
-	//if(bUpdateOnMoveSpeedChange)
-	//	attribute->OnMoveSpeedChanged.AddDynamic(this, &UWC_UserWidget_Character::Update);
+	if (bUpdateOnManaChange)
+		character->OnManaChangeDelegate.AddUObject(this, &UWC_UserWidget_Character::Update);
+		
+	if(bUpdateOnMoveSpeedChange)
+		character->OnMoveSpeedChangeDelegate.AddUObject(this, &UWC_UserWidget_Character::Update);
 
 }

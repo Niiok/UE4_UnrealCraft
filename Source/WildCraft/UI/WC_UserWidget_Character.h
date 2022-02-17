@@ -17,7 +17,7 @@ class WILDCRAFT_API UWC_UserWidget_Character : public UUserWidget
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		bool bUpdateOnHealthChange = false;
+		bool bUpdateOnHealthChange = true;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		bool bUpdateOnManaChange = false;
@@ -26,11 +26,11 @@ protected:
 		bool bUpdateOnMoveSpeedChange = false;
 
 	UPROPERTY(BlueprintReadOnly)
-		class UWC_AttributeSet_Character* AttributeSet;
+		const class UWC_AttributeSet_Character* AttributeSet;
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void BindCharacter(class AWC_Character* attribute);
+		void BindCharacter(class AWC_Character* character);
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void Update(float DeltaValue, const struct FGameplayTagContainer& EventTags);
