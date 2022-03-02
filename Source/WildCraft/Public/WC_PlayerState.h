@@ -7,6 +7,8 @@
 //#include "SaveGame/WC_SaveGame_Character.h"
 #include "WC_PlayerState.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerStateChangeDelegate);
+
 /**
  * 
  */
