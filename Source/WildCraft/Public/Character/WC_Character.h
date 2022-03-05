@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Voxel"/*",meta=(AllowPrivateAccess=true))*/)
 		class UVoxelNoClippingComponent* NoClipping;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Voxel"/*",meta=(AllowPrivateAccess=true))*/)
+		class UVoxelSimpleInvokerComponent* Invoker;
+
 private:
 		FTransform MeshRelativeTransform;
 		bool bRagdoll = false;

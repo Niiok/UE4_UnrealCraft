@@ -15,6 +15,7 @@
 #include "BrainComponent.h"
 #include "UI/WC_UserWidget_Character.h"
 #include "VoxelComponents/VoxelNoClippingComponent.h"
+#include "VoxelComponents/VoxelInvokerComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -37,6 +38,7 @@ AWC_Character::AWC_Character()
 	}
 
 	NoClipping = CreateDefaultSubobject<UVoxelNoClippingComponent>(TEXT("NoClipping"));
+	Invoker = CreateDefaultSubobject<UVoxelSimpleInvokerComponent>(TEXT("Invoker"));
 
 	UCharacterMovementComponent* move_comp = Cast<UCharacterMovementComponent>(GetMovementComponent());
 	if (move_comp)
