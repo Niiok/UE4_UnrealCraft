@@ -72,6 +72,8 @@ public:
 		AActor * DamageCauser
 	) override;
 
+	virtual void PossessedBy(AController* NewController) override;
+
 	virtual void PostInitializeComponents() override;
 
 

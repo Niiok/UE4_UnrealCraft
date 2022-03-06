@@ -16,6 +16,7 @@
 #include "UI/WC_UserWidget_Character.h"
 #include "VoxelComponents/VoxelNoClippingComponent.h"
 #include "VoxelComponents/VoxelInvokerComponent.h"
+#include "..\..\Public\Character\WC_Character.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -57,16 +58,6 @@ void AWC_Character::BeginPlay()
 	/*Widget_HPBar->SetRelativeLocation(
 		FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2));*/
 
-	//UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
-
-	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
-
-	auto widget = Cast<UWC_UserWidget_Character>(Widget_HPBar->GetUserWidgetObject());
-	if (widget)
-		widget->BindCharacter(this);
-	
-	OnHealthChangeDelegate.Broadcast(0, FGameplayTagContainer());
-	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
 }
 
 float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
@@ -102,6 +93,22 @@ float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageE
 	GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(DamageGE, 1.0f, context);
 
 	return DamageAmount;
+}
+
+void AWC_Character::PossessedBy(AController * NewController)
+{
+	Super::PossessedBy(NewController);
+
+	//UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
+
+	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.AddDynamic(this, &AWC_Character::HandleHealthChanged);
+
+	auto widget = Cast<UWC_UserWidget_Character>(Widget_HPBar->GetUserWidgetObject());
+	if (widget)
+		widget->BindCharacter(this);
+	
+	OnHealthChangeDelegate.Broadcast(0, FGameplayTagContainer());
+	//((UWC_AttributeSet_Character*)AttributeSet)->OnHealthChanged.Broadcast(0, FGameplayTagContainer());
 }
 
 void AWC_Character::PostInitializeComponents()

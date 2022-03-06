@@ -3,12 +3,13 @@
 using UnrealBuildTool;
 
 public class WildCraft : ModuleRules
-{
+{   
 	public WildCraft(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         bLegacyPublicIncludePaths = true;
+        //bLegacyPublicIncludePaths = false;
         PublicIncludePaths.Add(ModuleDirectory);
 
         MinFilesUsingPrecompiledHeaderOverride = 1;
