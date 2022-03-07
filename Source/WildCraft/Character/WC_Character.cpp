@@ -16,7 +16,6 @@
 #include "UI/WC_UserWidget_Character.h"
 #include "VoxelComponents/VoxelNoClippingComponent.h"
 #include "VoxelComponents/VoxelInvokerComponent.h"
-#include "..\..\Public\Character\WC_Character.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AWC_Character
@@ -51,7 +50,9 @@ AWC_Character::AWC_Character()
 
 void AWC_Character::BeginPlay()
 {
+	UE_LOG(LogTemp, Display, TEXT("Character : BeginPlay Start"));
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Display, TEXT("Character : BeginPlay End"));
 
 	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
 
@@ -97,7 +98,9 @@ float AWC_Character::TakeDamage(float DamageAmount, FDamageEvent const & DamageE
 
 void AWC_Character::PossessedBy(AController * NewController)
 {
+	UE_LOG(LogTemp, Display, TEXT("Character : PossessedBy Start"));
 	Super::PossessedBy(NewController);
+	UE_LOG(LogTemp, Display, TEXT("Character : PossessedBy End"));
 
 	//UWC_AttributeSet_Character* AttributeSet = GetAttributeSet();
 
@@ -113,7 +116,9 @@ void AWC_Character::PossessedBy(AController * NewController)
 
 void AWC_Character::PostInitializeComponents()
 {
+	UE_LOG(LogTemp, Display, TEXT("Character : PostInitializeComponent Start"));
 	Super::PostInitializeComponents();
+	UE_LOG(LogTemp, Display, TEXT("Character : PostInitializeComponent End"));
 
 	if (AbilitySystem)
 	{

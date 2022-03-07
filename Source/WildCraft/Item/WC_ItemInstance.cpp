@@ -2,7 +2,7 @@
 
 
 #include "WC_ItemInstance.h"
-#include "WC_GameInstance.h"
+#include "GameFramework/WC_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 	

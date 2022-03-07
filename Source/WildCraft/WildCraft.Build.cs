@@ -8,8 +8,8 @@ public class WildCraft : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        bLegacyPublicIncludePaths = true;
-        //bLegacyPublicIncludePaths = false;
+        //bLegacyPublicIncludePaths = true;
+        bLegacyPublicIncludePaths = false;
         PublicIncludePaths.Add(ModuleDirectory);
 
         MinFilesUsingPrecompiledHeaderOverride = 1;
