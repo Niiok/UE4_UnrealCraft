@@ -34,5 +34,5 @@ public:
 		static UWC_ItemInstance* New(int ID_, int Level_ = 1, int Count_ = 1);
 
 private:
-	const struct FWC_ItemIdeal* GetIdeal(int ID_);
+	const struct FWC_ItemIdeal* FindIdeal(int ID_);
 };

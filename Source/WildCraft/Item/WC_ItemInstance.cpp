@@ -15,7 +15,7 @@ UWC_ItemInstance * UWC_ItemInstance::New(int ID_, int Level_, int Count_)
 {
 	UWC_ItemInstance* new_item = NewObject<UWC_ItemInstance>();
 
-	new_item->Ideal = new_item->GetIdeal(ID_);
+	new_item->Ideal = new_item->FindIdeal(ID_);
 
 	new_item->ID = ID_;
 	new_item->Count = Count_;
@@ -26,7 +26,7 @@ UWC_ItemInstance * UWC_ItemInstance::New(int ID_, int Level_, int Count_)
 }
 
 
-const FWC_ItemIdeal * UWC_ItemInstance::GetIdeal(int ID_)
+const FWC_ItemIdeal * UWC_ItemInstance::FindIdeal(int ID_)
 {
 	UWC_GameInstance* gi = Cast<UWC_GameInstance>(UGameplayStatics::GetGameInstance(this));
 

@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "VoxelCharacter.h"
-#include "GameplayAbilitySet.h"
-#include "AbilitySystemInterface.h"
+#include "WC_CharacterBase.h"
 #include "WC_Character.generated.h"
 
 class UWC_AttributeSet_Character;
@@ -20,8 +18,7 @@ DECLARE_EVENT_TwoParams(AWC_Character, FWC_AttributeEvent, float, const struct F
 Every combatable Characters in this game inherited by this class.
 */
 UCLASS()
-class WILDCRAFT_API AWC_Character : public AVoxelCharacter
-	, public IAbilitySystemInterface, public IGameplayTagAssetInterface
+class WILDCRAFT_API AWC_Character : public AWC_CharacterBase
 {
 	GENERATED_BODY()
 
