@@ -14,6 +14,9 @@ L : Left
 R : Right
 H : Hand
 F : Foot
+Using this component as core melee system requires "Always tick pose and Refresh bone" option.
+Therefore, Not good for performance in dedicated server.
+https://forums.unrealengine.com/t/does-animmontage-play-on-a-dedicated-server-for-the-purpose-of-collisions/284561
  */
 UENUM(BlueprintType)
 enum class ELimb : uint8

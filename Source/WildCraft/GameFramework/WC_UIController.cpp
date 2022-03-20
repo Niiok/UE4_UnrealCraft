@@ -10,7 +10,9 @@ void AWC_UIController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(UIclass);
 	RootWidget = CreateWidget(this, UIclass, "RootWidget");
+	check(RootWidget);
 	RootWidget->AddToViewport();
 
 	FInputModeUIOnly InputModeParam;
