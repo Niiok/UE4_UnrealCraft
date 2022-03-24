@@ -1,0 +1,3 @@
+[submodule "Source/RPGv1"]
+	path = Source/RPGv1
+	url = https://github.com/Niiok/UE4module_RPGv1.git
