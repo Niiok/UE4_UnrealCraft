@@ -21,6 +21,8 @@ public class WildCraft : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[] { "AIModule", "UMG" });
 
+        PublicDependencyModuleNames.AddRange(new string[] { "RPGv1" });
+
 		//PrivateDependencyModuleNames.AddRange(new string[] {  });
 
 		// Uncomment if you are using Slate UI

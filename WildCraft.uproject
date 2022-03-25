@@ -16,6 +16,10 @@
 				"CoreUObject",
 				"UMG"
 			]
+		},
+		{
+			"Name": "RPGv1",
+			"Type": "Runtime"
 		}
 	],
 	"Plugins": [
