@@ -18,7 +18,8 @@ DECLARE_EVENT_TwoParams(AWC_Character, FWC_AttributeEvent, float, const struct F
 Every combatable Characters in this game inherited by this class.
 */
 UCLASS()
-class WILDCRAFT_API AWC_Character : public AWC_CharacterBase
+class WILDCRAFT_API AWC_Character : public AWC_CharacterBase,
+	public IAbilitySystemInterface, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 

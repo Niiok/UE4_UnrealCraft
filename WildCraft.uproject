@@ -14,12 +14,14 @@
 				"GameplayAbilities",
 				"GameplayTasks",
 				"CoreUObject",
-				"UMG"
+				"UMG",
+				"AIModule"
 			]
 		},
 		{
 			"Name": "RPGv1",
-			"Type": "Runtime"
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

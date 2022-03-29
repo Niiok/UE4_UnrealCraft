@@ -7,11 +7,12 @@
 #include "VoxelCharacter.h"
 #include "GameplayAbilitySet.h"
 #include "AbilitySystemInterface.h"
+#include "Status/RPG_StatusInterface.h"
+#include "Items/RPG_InventoryInterface.h"
 #include "WC_CharacterBase.generated.h"
 
 UCLASS()
 class WILDCRAFT_API AWC_CharacterBase : public AVoxelCharacter
-	, public IAbilitySystemInterface, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
@@ -23,11 +24,7 @@ public:
 //	// Called when the game starts or when spawned
 //	virtual void BeginPlay() override;
 
-public:	
-	// IAbilitySystemInterface을(를) 통해 상속됨
-	virtual UAbilitySystemComponent * GetAbilitySystemComponent() const override { return NULL; }
-
-	// IGameplayTagAssetInterface을(를) 통해 상속됨
-	virtual void GetOwnedGameplayTags(FGameplayTagContainer & TagContainer) const override PURE_VIRTUAL(AWC_CharacterBase::GetAbilitySystemComponent);
-
+public:
+	virtual IRPG_StatusInterface* GetStatus() { return NULL; } //PURE_VIRTUAL(AWC_CharacterBase::GetStatus);
+	virtual IRPG_InventoryInterface* GetInventory() { return NULL; } //PURE_VIRTUAL(AWC_CharacterBase::GetInventory);
 };
